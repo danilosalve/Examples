@@ -1,0 +1,56 @@
+<ApMenu>
+	<DocumentProperties>
+		<Module></Module>
+		<Version>10.1</Version>
+	</DocumentProperties>
+	<Menu Status="Enable">
+		<Title lang="pt">&Atualizações</Title>
+		<Title lang="es">&Actualizaciones</Title>
+		<Title lang="en">&Updates</Title>
+	</Menu>
+	<Menu Status="Enable">
+		<Title lang="pt">&Consultas</Title>
+		<Title lang="es">&Consultas</Title>
+		<Title lang="en">&Queries</Title>
+	</Menu>
+	<Menu Status="Enable">
+		<Title lang="pt">&Relatorios</Title>
+		<Title lang="es">&Informes</Title>
+		<Title lang="en">&Reports</Title>
+		<MenuItem Status="Enable">
+			<Title lang="pt">Campos</Title>
+			<Title lang="es">Campos</Title>
+			<Title lang="en">Campos</Title>
+			<Function>ESPR002</Function>
+			<Type>01</Type>
+			<Access>xxxxxxxxxx</Access>
+			<Module>97</Module>
+			<Owner>0</Owner>
+			<KeyWord>
+				<KeyWord lang="pt">CAMPOS,SX3</KeyWord>
+				<KeyWord lang="es">                         </KeyWord>
+				<KeyWord lang="en">                         </KeyWord>
+			</KeyWord>
+		</MenuItem>
+		<MenuItem Status="Enable">
+			<Title lang="pt">Funcoes compiladas</Title>
+			<Title lang="es">Funcoes compiladas</Title>
+			<Title lang="en">Funcoes compiladas</Title>
+			<Function>ESPR001</Function>
+			<Type>01</Type>
+			<Access>xxxxxxxxxx</Access>
+			<Module>97</Module>
+			<Owner>0</Owner>
+			<KeyWord>
+				<KeyWord lang="pt">FUNCAO,RPO</KeyWord>
+				<KeyWord lang="es">                         </KeyWord>
+				<KeyWord lang="en">                         </KeyWord>
+			</KeyWord>
+		</MenuItem>
+	</Menu>
+	<Menu Status="Enable">
+		<Title lang="pt">&Miscelanea</Title>
+		<Title lang="es">&Miscelanea</Title>
+		<Title lang="en">&Miscellaneous</Title>
+	</Menu>
+</ApMenu>
