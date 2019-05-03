@@ -44,7 +44,7 @@ Static Function BrowseDef()
 
     oMBrowse := FWMBrowse():New()
 	oMBrowse:SetAlias("SZA")
-	oMBrowse:SetDescription( OemToAnsi(STRESP001))  //"Casos de Teste"
+	oMBrowse:SetDescription( OemToAnsi( STRESP001 ))  //"Casos de Teste"
 	oMBrowse:SetMenuDef("ESPA001")
     oMBrowse:SetTotalDefault("ZA_COD","COUNT",OemToAnsi("Total de Registros"))
     
@@ -57,6 +57,8 @@ Static Function BrowseDef()
     oTableAtt := TableAttDef()
 	oMBrowse:SetAttach( .T. )
 	oMBrowse:SetViewsDefault( oTableAtt:aViews )
+    oMBrowse:SetChartsDefault( oTableAtt:aCharts )
+    oMBrowse:SetIDChartDefault( "CTs" )
     
 Return oMBrowse
 
@@ -73,7 +75,8 @@ Cria as vis?s e graficos
 //------------------------------------------------------------------------------
 Static Function TableAttDef()
 
-    Local oAutomat	:= Nil //"Casos de Teste Automatizados"
+    Local oAutomat	:= Nil 
+    Local oGrafico  := Nil 
     Local oTableAtt := FWTableAtt():New()
 
     oTableAtt:SetAlias("SZA")
@@ -87,6 +90,19 @@ Static Function TableAttDef()
     oAutomat:SetPublic( .T. )
     oAutomat:AddFilter(STRESP002, "ZA_STATUS == 'A'") //"Casos de Teste Automatizados"
     oTableAtt:AddView(oAutomat)
+
+    // Grafico - Pizza
+    oGrafico := FWDSChart():New()
+    oGrafico:SetName( STRESP001 ) 
+    oGrafico:SetTitle( "CTs x Status" )
+    oGrafico:SetID( "PorStatus" )
+    oGrafico:SetType( "PIECHART" )
+    oGrafico:SetSeries( { {"SZA", "ZA_STATUS", "COUNT"} } )
+    oGrafico:SetCategory( { {"SZA", "ZA_STATUS"} } )
+    oGrafico:SetPublic( .T. )
+    oGrafico:SetLegend( CONTROL_ALIGN_LEFT )
+    oGrafico:SetTitleAlign( CONTROL_ALIGN_CENTER )
+    oTableAtt:AddChart( oGrafico )
 
 Return oTableAtt
 
