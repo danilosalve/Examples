@@ -13,12 +13,12 @@ User Function DSEMVCGD()
 
 	PREPARE ENVIRONMENT EMPRESA "T1" FILIAL "D MG 01 " MODULO "FAT"
 
-	//DSFAT310(.T.,.F.,.F.,2)
+	DSFAT310(.T.,.F.,.F.,2)
 
 	DbSelectArea("AD5")
 	DbSelectArea("AD6")
 	AD5->(DbGoTo(107))
-	//DSFAT310(.F.,.T.,.F.,2)
+	DSFAT310(.F.,.T.,.F.,2)
 
 	DSDELALL()
 
@@ -107,8 +107,8 @@ Static Function DSFAT310(lInclui , lAltera , lExclui , 	nItem)
 				ConOut( "Id do campo de erro: " 		+ AllToChar( aErro[4] ))
 				ConOut( "Id do erro: " 					+ AllToChar( aErro[5] ))
 				ConOut( "Mensagem do erro: " 			+ AllToChar( aErro[6] ))
-				ConOut( "Mensagem da solução: " 		+ AllToChar( aErro[7] ))
-				ConOut( "Valor atribuído: " 			+ AllToChar( aErro[8] ))
+				ConOut( "Mensagem da soluï¿½ï¿½o: " 		+ AllToChar( aErro[7] ))
+				ConOut( "Valor atribuï¿½do: " 			+ AllToChar( aErro[8] ))
 				ConOut( "Valor anterior: " 				+ AllToChar( aErro[9] ))
 			EndIf
 
