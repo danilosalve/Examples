@@ -1,7 +1,7 @@
 #Include "Protheus.CH"
 
 //-------------------------------------------------------------------
-/*/{Protheus.doc} DSbubble
+/*/{Protheus.doc} DSConsCEP
     Executa a consulta de um CEP atravez de um WS
 
     @param		cCep,   Caractere   , Codigo Postal - CEP  
