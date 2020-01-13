@@ -10,8 +10,13 @@
     @example DSClasse():New()
 /*/
 //-----------------------------------------------------------
-Class DSClasse
-
+Class DSClasse from longnameclass
+/*
+    Ao herdar de longnameclass, perdemos a limitação de dez caracteres, 
+    mas temos um ponto de atenção muito importante! 
+    Se herdamos novamente a nossa classe, perdemos essa limitação, 
+    portanto CUIDADO!
+*/
     Data aEndereco     As Array
     Data cNome         As Character
     Data cSobrenome    As Character
@@ -21,7 +26,7 @@ Class DSClasse
     Method New() Constructor
     Method Activate()
 	Method IsActive()
-    Method Load()
+    Method Destroy()
 
 EndClass
 
@@ -35,14 +40,19 @@ EndClass
     @example DSClasse():New()
 /*/
 //-----------------------------------------------------------
-Method New() Class DSClasse
-	
-    Self:aEndereco  := {}
-    Self:cNome      := ""
-    Self:cSobreNome := ""
-    Self:nIdade     := 0
-	Self:lActive    := .F.
+Method New( aEndereco, cNome, cSobreNome, nIdade ) Class DSClasse
 
+    Default aEndereco   := {}
+    Default cNome       := ""
+    Default cSobreNome  := ""
+    Default nIdade      := 0
+    
+    Self:aEndereco  := aEndereco
+    Self:cNome      := cNome
+    Self:cSobreNome := cSobreNome
+    Self:nIdade     := nIdade  
+    Self:lActive    := .F.
+    	
 Return Self
 
 //-----------------------------------------------------------
@@ -78,31 +88,22 @@ Method IsActive() Class DSClasse
 Return Self:lActive
 
 //-----------------------------------------------------------
-/*/{Protheus.doc} Load
-    Metodo responsavel carregar os dados na classe
+/*/{Protheus.doc} IsActive
+    Metodo responsavel por destroir o objeto.
 
     @author Danilo Salve
-    @since 03/05/2019
+    @since 09/01/2020
     @version 1.0
-    @example DSClasse:Load( {"Rua João Amado Coutinho",121,"Apto 23 Bloco A"}, "Danilo","Salve",29)
+    @example DSClasse:Destroy()
 /*/
 //-----------------------------------------------------------
-Method Load( aEndereco, cNome, cSobreNome, nIdade) Class DSClasse
+Method Destroy() Class DSClasse
 
-    Local lRet  := .T.
-
-    Default aEndereco   := {}
-    Default cNome       := ""
-    Default cSobreNome  := ""
-    Default nIdade      := 0
-
-    If Self:IsActive()
-        Self:aEndereco  := aEndereco
-        Self:cNome      := cNome
-        Self:cSobreNome := cSobreNome
-        Self:nIdade     := nIdade  
-    Else
-        lRet  := .F.                
-    Endif
-
-Return lRet
+    aSize(Self:aEndereco, 0)
+    Self:aEndereco  := Nil
+    Self:cNome      := Nil
+    Self:cSobreNome := Nil
+    Self:nIdade     := Nil
+    Self:lActive    := .F.
+    
+Return 
