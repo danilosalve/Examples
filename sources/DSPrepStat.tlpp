@@ -1,0 +1,82 @@
+#Include "TOTVS.CH"
+#include "TBICONN.CH"
+
+/*/{Protheus.doc} DsPrepareStatement
+Exemplo de utilização do metodo FwPrepareStatement
+@type function
+@version 1.0
+@author danilo.salve
+@since 17/06/2020
+@param nLoopMax, Numerico, Valor maximo do Loop
+@return aNomeCliente, Array, Array com o nome dos clientes
+/*/
+Function DsPrepareStatement (nLoopMax as Numeric) as Array
+
+    Local aNomeCliente  := {}
+    Local cAlias        := GetNextAlias()
+    Local cFinalQuery   as Char
+    Local cFilSA1       := xFilial("SA1")
+    Local cFilSC5       := xFilial("SC5")
+    Local cQuery        as Char
+    Local oStatement    as Object
+    Local nLoop         := 0
+
+    Default nLoopMax    := 10
+
+    cQuery := " SELECT A1_NOME FROM " + RetSqlName("SA1") + " WHERE A1_FILIAL=? AND A1_COD=? AND A1_LOJA=? AND D_E_L_E_T_ = ' ' " 
+    oStatement := FWPreparedStatement():New(cQuery)    
+
+    DbSelectArea("SC5")
+    SC5->(DbSetOrder(1))
+
+    While !SC5->(Eof()) .And. SC5->C5_FILIAL == cFilSC5 .And. nLoop++ < nLoopMax
+
+        oStatement:SetString(1, cFilSA1 )
+        oStatement:SetString(2, SC5->C5_CLIENTE )
+        oStatement:SetString(3, SC5->C5_LOJACLI )
+
+        //Recupera a consulta já com os parâmetros injetados
+        cFinalQuery := oStatement:GetFixQuery()
+
+        dbUseArea(.T.,"TOPCONN",TcGenQry(,,cFinalQuery),cAlias,.T.,.T.)
+
+        If !(cAlias)->(Eof())
+            aAdd(aNomeCliente, (cAlias)->A1_NOME )
+        Endif
+
+        (cAlias)->(DbCloseArea())
+
+        SC5->(DbSkip())
+
+    Enddo
+
+    SC5->(DbCloseArea())
+    oStatement:Destroy()
+    
+Return aNomeCliente
+
+/*/{Protheus.doc} DsTeste
+Função utilizada para testar a função DsPrepareStatement
+@type function
+@version 1.0
+@author danilo.salve
+@since 17/06/2020
+/*/
+User Function DsTeste()
+
+    Local aNomeCliente as Char
+    Local nContador := 1
+
+    PREPARE ENVIRONMENT EMPRESA 'T1' FILIAL 'D MG 01 '
+
+    aNomeCliente := DsPrepareStatement (5)
+
+    If !Empty(aNomeCliente)
+        For nContador := 1 to Len(aNomeCliente)
+            Conout("Nome do Cliente: " + aNomeCliente[nContador])
+        Next nContador
+    Endif
+
+    RESET ENVIRONMENT
+
+Return Nil
