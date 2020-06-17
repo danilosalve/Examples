@@ -8,11 +8,11 @@ Exemplo de utilização do metodo FwPrepareStatement
 @author danilo.salve
 @since 17/06/2020
 @param nLoopMax, Numerico, Valor maximo do Loop
-@return aNomeCliente, Array, Array com o nome dos clientes
+@return aClientes, Array, Array com o nome dos clientes
 /*/
 Function DsPrepareStatement (nLoopMax as Numeric) as Array
 
-    Local aNomeCliente  := {}
+    Local aClientes  := {}
     Local cAlias        := GetNextAlias()
     Local cFinalQuery   as Char
     Local cFilSA1       := xFilial("SA1")
@@ -20,28 +20,36 @@ Function DsPrepareStatement (nLoopMax as Numeric) as Array
     Local cQuery        as Char
     Local oStatement    as Object
     Local nLoop         := 0
+    Local aSelect       := {}
+    Local aTamSx3       := TamSx3("A1_VENCLC")
 
     Default nLoopMax    := 10
 
-    cQuery := " SELECT A1_NOME FROM " + RetSqlName("SA1") + " WHERE A1_FILIAL=? AND A1_COD=? AND A1_LOJA=? AND D_E_L_E_T_ = ' ' " 
+    aAdd(aSelect, "A1_NOME")
+    aAdd(aSelect, {"A1_VENCLC", aTamSx3[3], aTamSx3[1], aTamSx3[2] })
+
+    cQuery := " SELECT A1_NOME, A1_VENCLC FROM " + RetSqlName("SA1") + " WHERE A1_FILIAL=? AND A1_COD=? AND A1_LOJA=? AND D_E_L_E_T_ = ' ' " 
     oStatement := FWPreparedStatement():New(cQuery)    
 
     DbSelectArea("SC5")
-    SC5->(DbSetOrder(1))
+    SC5->(DbSetOrder(1))    
 
     While !SC5->(Eof()) .And. SC5->C5_FILIAL == cFilSC5 .And. nLoop++ < nLoopMax
 
         oStatement:SetString(1, cFilSA1 )
         oStatement:SetString(2, SC5->C5_CLIENTE )
         oStatement:SetString(3, SC5->C5_LOJACLI )
-
+        //Inclui os campos de 
+        oStatement:setFields( aSelect )
         //Recupera a consulta já com os parâmetros injetados
         cFinalQuery := oStatement:GetFixQuery()
 
         dbUseArea(.T.,"TOPCONN",TcGenQry(,,cFinalQuery),cAlias,.T.,.T.)
+        //Executa o TcSetfield
+        oStatement:doTcSetField( cAlias )
 
         If !(cAlias)->(Eof())
-            aAdd(aNomeCliente, (cAlias)->A1_NOME )
+            aAdd( aClientes, {(cAlias)->A1_NOME, (cAlias)->A1_VENCLC })            
         Endif
 
         (cAlias)->(DbCloseArea())
@@ -50,10 +58,11 @@ Function DsPrepareStatement (nLoopMax as Numeric) as Array
 
     Enddo
 
+    aSize(aTamSx3, 0)
     SC5->(DbCloseArea())
     oStatement:Destroy()
     
-Return aNomeCliente
+Return aClientes
 
 /*/{Protheus.doc} DsTeste
 Função utilizada para testar a função DsPrepareStatement
@@ -64,18 +73,24 @@ Função utilizada para testar a função DsPrepareStatement
 /*/
 User Function DsTeste()
 
-    Local aNomeCliente as Char
-    Local nContador := 1
+    Local aClientes as Array
+    Local nContador as Numeric
 
     PREPARE ENVIRONMENT EMPRESA 'T1' FILIAL 'D MG 01 '
 
-    aNomeCliente := DsPrepareStatement (5)
+    Conout("Inicio Query: " + Time())
 
-    If !Empty(aNomeCliente)
-        For nContador := 1 to Len(aNomeCliente)
-            Conout("Nome do Cliente: " + aNomeCliente[nContador])
+    aClientes := DsPrepareStatement (900)
+
+    Conout("Fim Query: " + Time())
+
+    If !Empty(aClientes)
+        For nContador := 1 to Len(aClientes)
+            Conout("Nome do Cliente: " + RTrim(aClientes[nContador,1]) + " - Venc. Lim. Credito: " + DtoC(aClientes[nContador,2]))
         Next nContador
     Endif
+
+    aSize(aClientes,0)
 
     RESET ENVIRONMENT
 
