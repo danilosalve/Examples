@@ -27,7 +27,8 @@ Function DSHashMap()
     oHash:Set( "Argentina"   , 2 )
     oHash:Set( "França"      , 2 )
     oHash:Set( "Uruguai"     , 2 )
-
+    oHash:Set( "Estados_Unidos_da_America"  , 0 )
+    
     If oHash:List( oList )       
 
         For nI := 1 To Len( oList )
