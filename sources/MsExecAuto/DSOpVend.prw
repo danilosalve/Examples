@@ -20,7 +20,7 @@ User Function DSOpVend()
 	
 	ConOut( Repl( "-", 80 ) )
 	ConOut( PadC( " Teste de Inclusao de Oportunidade de Venda ", 80 ) )
-	ConOut( " Inicio Teste: " + Time(), 80 ) )
+	ConOut( " Inicio Teste: " + Time(), 80 )
 	ConOut( Repl( "-", 80 ) )
 		
 	aAdd( aCabec, { "AD1_REVISA"	, "01"		           	, NIL } )

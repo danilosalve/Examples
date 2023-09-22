@@ -13,19 +13,16 @@
 /*/
 //------------------------------------------------------------------------------
 Function DSPedVend()
-
     Local aCabec    := {}
     Local aItem     := {}
     Local aItens    := {}
-    Local lDevol    := .T. 
-    Local nX        := 0
-
+    Local lDevol    := .T.
+    
     Private lMsErroAuto := .F.
 
     ConOut( Repl( "-", 80 ) )   
 
     If lDevol
-
         ConOut( PadC( "Teste de Inclusao de 1 pedido de venda do tipo devolução com 1 item ", 80 ) )
 
         // +----------------------------------+
@@ -63,7 +60,6 @@ Function DSPedVend()
         aAdd( aItem, { "C6_SERIORI" , "001 "        , Nil } )
         aAdd( aItem, { "C6_ITEMORI" , "0001"        , Nil } )
         aAdd( aItens, aItem )
-
     Endif
 
     ConOut("Inicio: "+Time())
@@ -80,5 +76,4 @@ Function DSPedVend()
     EndIf
 
     ConOut("Fim  : "+Time())
-
 Return Nil
