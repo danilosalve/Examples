@@ -1,0 +1,5 @@
+{
+	"version": "1.0.4",
+	"windows_x64": "webagent\\web-agent-1.0.4-windows-x64-release.setup.exe",
+	"darwin_universal": "20-10-10-p12_smartclient_web_agent_1.0.4_mac-universal.dmg",
+}
