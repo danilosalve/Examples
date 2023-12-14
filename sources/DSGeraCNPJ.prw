@@ -15,10 +15,9 @@
 /*/
 //-------------------------------------------------------------------
 Function DSGeraCNPJ( nBase )
-
-    Local cBase := ""
-    Local cRet  := ""
-    Local nDv   := 0
+    Local cBase as character
+    Local cRet  as character
+    Local nDv   as numeric
 
     Default nBase   := Randomize( 0 , 999999999 )
 
@@ -49,9 +48,9 @@ Return cRet
 
 Static Function CalcDv( cBase , nMult )
 
-    Local nI    := 0
-    Local nMod  := 0
-    Local nRet  := 0
+    Local nI    as numeric
+    Local nMod  as numeric
+    Local nRet  as numeric
 
     Default cBase := "000000000000"
     Default nMult := 0

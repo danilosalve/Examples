@@ -23,7 +23,6 @@ Function DSFrMrkTmp()
     Local cAlias    := GetNextAlias()
     Local cMarca	:= GetMark()
     Local cQuery    := GetQuery("SF1", aFields, .T.)
-    Local cIndex    := ""
     Local oMBrowse  := Nil
 
 	DEFINE MSDIALOG oDlg TITLE STR0001 FROM aSize[1],aSize[2] TO aSize[3],aSize[4] PIXEL    

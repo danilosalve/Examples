@@ -4,7 +4,7 @@
 /*/{Protheus.doc} TestePanel()
 Teste Dialog com Panel
 
-@author 	Squad CRM & Faturamento
+@author 	Danilo Salve
 @since 		13/05/2019
 /*/
 //-------------------------------------------------------------------

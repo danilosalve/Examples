@@ -14,10 +14,10 @@ Function DsPrepareStatement (nLoopMax as Numeric) as Array
 
     Local aClientes  := {}
     Local cAlias        := GetNextAlias()
-    Local cFinalQuery   as Char
+    Local cFinalQuery   as Character
     Local cFilSA1       := xFilial("SA1")
     Local cFilSC5       := xFilial("SC5")
-    Local cQuery        as Char
+    Local cQuery        as Character
     Local oStatement    as Object
     Local nLoop         := 0
     Local aSelect       := {}
