@@ -1,0 +1,125 @@
+
+#include "msobject.ch"
+#include "totvs.framework.treports.integratedprovider.th"
+
+namespace custom.sv.exemplos.produtos.integratedprovider
+
+@totvsFrameworkTReportsIntegratedProvider(active=.T., team="SIGACOM", tables="SB1", name="Materiais", country="ALL", initialRelease="12.1.2210")
+class SB1TReportsBusinessObject from totvs.framework.treports.integratedprovider.IntegratedProvider
+	public method new() as object
+    public method getAreas() as array
+	public method getData() as object
+    public method getDescription() as character
+	public method getSchema() as object
+
+    data lExistPergunte as logical
+endclass
+
+/*/{Protheus.doc} SB1TReportsBusinessObject::new
+Método construtor da classe.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Nova instancia do objeto.
+/*/
+method new() class SB1TReportsBusinessObject
+	_Super:new()
+    //Define o nome do Objeto de Negócio
+	self:setDisplayName("Meus Produtos - DANILO")
+    
+    self:lExistPergunte := self:setPergunte("MTR290") //Indica o pergunte que será utilizado no relatório GPER140    
+    if !self:lExistPergunte
+        if !self:setErrorStatus(400,"Sem Pergunte","Verifique o grupo de perguntas informado!")
+            FwLogMsg("WARN",, "SmartView",,, , "Codigo de erro invalido, aceito somente codigos de erro 4xx", , ,)
+        endif
+        FwLogMsg("WARN",, "SmartView",,, , "Grupo de perguntas nao encontrado", , ,)  
+    endif
+return self
+
+/*/{Protheus.doc} SB1TReportsBusinessObject::getDescription() as character
+Obtem a descrição do relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return character, Descrição do relatorio.
+/*/
+method getDescription() as character class SB1TReportsBusinessObject
+return "Produtos do Protheus - TESTE"
+  
+/*/{Protheus.doc} SB1TReportsBusinessObject::getAreas() as array
+Obtem o nome dos modulos relacionados ao relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return array, Lista com o nome dos modulos
+/*/
+method getAreas() as array class SB1TReportsBusinessObject
+return {"Compras"}
+
+/*/{Protheus.doc} SB1TReportsBusinessObject::getData(nPage as numeric, oFilter as object) as object
+Método responsavel por obter os dados do relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Dados do relatorio
+/*/
+method getData(nPage as numeric, oFilter as object) as object class SB1TReportsBusinessObject
+	local cQuery as character
+    local jParams as json
+    local cWhere as character
+ 
+    if !self:lExistPergunte //retorno do método SetPergunte()
+        return self:oData
+    else
+        jParams := oFilter:getParameters() //metodo para retorno do json dos parâmetros
+        // Define a whery utilizando os parametros do relatorio.
+        cWhere := " B1_FILIAL = '" + FwXFilial('SB1') + "'"
+        cWhere += " AND B1_COD BETWEEN '" + jParams['MV_PAR01'][1] + "' AND '"+ jParams['MV_PAR02'][1] + "' "
+        cWhere += " AND B1_TIPO BETWEEN '" + jParams['MV_PAR03'][1] + "' AND '"+ jParams['MV_PAR04'][1] + "' "
+        cWhere += " AND B1_GRUPO BETWEEN '" + jParams['MV_PAR05'][1] + "' AND '"+ jParams['MV_PAR06'][1] + "' "
+        cWhere += " AND B1_LOCPAD BETWEEN '" + jParams['MV_PAR17'][1] + "' AND '"+ jParams['MV_PAR18'][1] + "' "
+
+        If oFilter:hasFilter()
+            cWhere += " AND " + oFilter:getSQLExpression()
+        Endif
+
+        cWhere += " AND D_E_L_E_T_ = ' '"
+    
+        //Define a query do Objeto de Negócio
+	    cQuery := "SELECT #QueryFields# FROM " + RetSQLName("SB1") +  " WHERE #QueryWhere#"
+    
+        //Define a quantidade máxima por página (Default 100)
+        self:setPageSize(500)
+        //Define a query do Objeto de Negócio
+        self:setQuery(cQuery)
+        //Define o campo de ordenação da query
+	    self:setOrder("B1_COD")
+        //Define o where da query
+        self:setWhere(cWhere)
+    endif
+return self:oData
+
+/*/{Protheus.doc} SB1TReportsBusinessObject::getSchema() as object
+Método responsavel por obter os metadados do relatorio.
+
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Schema de campos
+/*/
+method getSchema() as object class SB1TReportsBusinessObject
+	self:addProperty("Filial", "Filial", "string", "Filial", "B1_FILIAL")
+	self:addProperty("Codigo", "Codigo", "string", "Código", "B1_COD")
+	self:addProperty("Descricao", "Descricao", "string", "Descricao","B1_DESC")
+	self:addProperty("Tipo", "Tipo", "string", "Tipo","B1_TIPO")
+	self:addProperty("Unidade", "Unidade de medida", "string", "Unidade","B1_UM")
+	self:addProperty("Revisao", "Revisao", "date", "Revisao","B1_UREV")
+    //self:aliasToSchema("SB1" , {"B1_FILIAL", "B1_COD", "B1_DESC", "B1_TIPO", "B1_UM", "B1_UREV"})
+return self:oSchema
+  
+
