@@ -28,7 +28,7 @@ method new() class SB1TReportsBusinessObject
     //Define o nome do Objeto de Negócio
 	self:setDisplayName("Meus Produtos - DANILO")
     
-    self:lExistPergunte := self:setPergunte("MTR290") //Indica o pergunte que será utilizado no relatório GPER140    
+    self:lExistPergunte := self:setPergunte("DSSVIEW") // MTR290
     if !self:lExistPergunte
         if !self:setErrorStatus(400,"Sem Pergunte","Verifique o grupo de perguntas informado!")
             FwLogMsg("WARN",, "SmartView",,, , "Codigo de erro invalido, aceito somente codigos de erro 4xx", , ,)
@@ -81,7 +81,7 @@ method getData(nPage as numeric, oFilter as object) as object class SB1TReportsB
         cWhere += " AND B1_COD BETWEEN '" + jParams['MV_PAR01'][1] + "' AND '"+ jParams['MV_PAR02'][1] + "' "
         cWhere += " AND B1_TIPO BETWEEN '" + jParams['MV_PAR03'][1] + "' AND '"+ jParams['MV_PAR04'][1] + "' "
         cWhere += " AND B1_GRUPO BETWEEN '" + jParams['MV_PAR05'][1] + "' AND '"+ jParams['MV_PAR06'][1] + "' "
-        cWhere += " AND B1_LOCPAD BETWEEN '" + jParams['MV_PAR17'][1] + "' AND '"+ jParams['MV_PAR18'][1] + "' "
+//        cWhere += " AND B1_LOCPAD BETWEEN '" + jParams['MV_PAR17'][1] + "' AND '"+ jParams['MV_PAR18'][1] + "' "
 
         If oFilter:hasFilter()
             cWhere += " AND " + oFilter:getSQLExpression()
