@@ -3,7 +3,7 @@
 #DEFINE PERGUNTE "DSSCHED"
 
 //-----------------------------------------------------------
-/*/{Protheus.doc} DSSCHED
+/*/{Protheus.doc} DsSched
 Fonte Fake para simular uma tarefa / agendamento no schedule
 @type function
 @version 1.0
@@ -11,11 +11,10 @@ Fonte Fake para simular uma tarefa / agendamento no schedule
 @since 15/12/2023
 /*/
 //-----------------------------------------------------------
-Function DSSCHED()
+function DsSched()
     local cLog as character
     local lLog as logical
-
-    //Pergunte( PERGUNTE, .f. )    
+       
     lLog := iif(type("MV_PAR01") == "N", MV_PAR01 == 1, .f.)
     cLog := iif(type("MV_PAR02") == "C", MV_PAR02, '')
 
@@ -46,7 +45,7 @@ Função estatica com a configurações do Schedule
 @return array, Parâmetros do schedule
 /*/
 //-----------------------------------------------------------
-static Function Scheddef() as array
+static function Scheddef() as array
 	local aParam as array
 	
 	aParam := { "P",;			//Tipo R para relatorio P para processo

@@ -49,7 +49,7 @@ static Function Scheddef() as array
 	local aParam as array
 	//aParam := { "R", "MTA330", /*Alias*/, /*Ord*/, ""}
 	aParam := { "P",;			//Tipo R para relatorio P para processo
-        "AUTONFE",;		//Pergunte do relatorio, caso nao use passar ParamDef
+        "PARAMDEF",;		//Pergunte do relatorio, caso nao use passar ParamDef
         ,;				//Alias
         ,;				//Array de ordens
 	}

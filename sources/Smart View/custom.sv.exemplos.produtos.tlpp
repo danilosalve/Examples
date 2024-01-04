@@ -69,8 +69,8 @@ Método responsavel por obter os dados do relatorio.
 /*/
 method getData(nPage as numeric, oFilter as object) as object class SB1TReportsBusinessObject
 	local cQuery as character
-    local jParams as json
     local cWhere as character
+    local jParams as json
  
     if !self:lExistPergunte //retorno do método SetPergunte()
         return self:oData
@@ -100,6 +100,8 @@ method getData(nPage as numeric, oFilter as object) as object class SB1TReportsB
 	    self:setOrder("B1_COD")
         //Define o where da query
         self:setWhere(cWhere)
+
+        FwFreeObj(jParams)
     endif
 return self:oData
 
