@@ -104,5 +104,5 @@ method getSchema() as object class XistoTReportsBusinessObject
     // Adiciona um parâmetro manualmente    
     self:addParameter("SELLER", "Vendedor", "string", .F.) //"Vendedor"
     // Adiciona um LookUp utilizando o
-    //self:setCustomURL("SELLER", "/api/framework/v1/genericQuery?tables=SA3&fields=A3_COD,A3_NOME&Format=smartview&KeyProperty=a3_cod", 1)
+    self:setCustomURL("SELLER", "/api/framework/v1/genericQuery?tables=SA3&fields=A3_COD,A3_NOME&Format=smartview&KeyProperty=a3_cod", 1)
 return self:oSchema
