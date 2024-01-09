@@ -1,0 +1,122 @@
+
+#include "msobject.ch"
+#include "totvs.framework.treports.integratedprovider.th"
+
+namespace custom.sv.exemplos.pedidos.integratedprovider
+
+@totvsFrameworkTReportsIntegratedProvider(active=.T., team="SIGAFAT", tables="SC5, SC6", name="Framework", country="ALL", initialRelease="12.1.2310")
+class PedidosTReportsBusinessObject from totvs.framework.treports.integratedprovider.IntegratedProvider
+	public method new() as object
+	public method getAreas() as array
+	public method getData() as object
+	public method getDescription() as character
+	public method getSchema() as object
+
+	data lExistPergunte as logical
+endclass
+
+/*/{Protheus.doc} PedidosTReportsBusinessObject::new
+Método construtor da classe.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Nova instancia do objeto.
+/*/
+method new() class PedidosTReportsBusinessObject
+	_Super:new()
+	//Define o nome do Objeto de Negócio
+	self:setDisplayName("Pedidos de vendas - Testes")
+	// Define um grupo de perguntas
+	self:lExistPergunte :=  self:setPergunte("DSPARAMS")
+	if !self:lExistPergunte
+		if !self:setErrorStatus(400,"Sem Pergunte","Verifique o grupo de perguntas informado!")
+			FwLogMsg("WARN",, "SmartView",,, , "Codigo de erro invalido, aceito somente codigos de erro 4xx", , ,)
+		endif
+		FwLogMsg("WARN",, "SmartView",,, , "Grupo de perguntas nao encontrado", , ,)
+	endif
+return self
+
+/*/{Protheus.doc} PedidosTReportsBusinessObject::getDescription() as character
+Obtem a descrição do relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return character, Descrição do relatorio.
+/*/
+method getDescription() as character class PedidosTReportsBusinessObject
+return "Pedidos de vendas - TESTE"
+
+/*/{Protheus.doc} PedidosTReportsBusinessObject::getAreas() as array
+Obtem o nome dos modulos relacionados ao relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return array, Lista com o nome dos modulos
+/*/
+method getAreas() as array class PedidosTReportsBusinessObject
+return {"Framework"}
+
+/*/{Protheus.doc} PedidosTReportsBusinessObject::getData(nPage as numeric, oFilter as object) as object
+Método responsavel por obter os dados do relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Dados do relatorio
+/*/
+method getData(nPage as numeric, oFilter as object) as object class PedidosTReportsBusinessObject
+	local cQuery as character
+	local cWhere as character
+	local jParams as json
+
+	if !self:lExistPergunte //retorno do método SetPergunte()
+		return self:oData
+	else
+		jParams := oFilter:getParameters() //metodo para retorno do json dos parâmetros
+		// Define a whery utilizando os parametros do relatorio.
+		cWhere := " SC5.C5_FILIAL = '" + FwXFilial('SC5') + "'"
+		cWhere += " AND SC5.C5_CLIENTE BETWEEN '" + jParams['MV_PAR01'][1] + "' AND '" + jParams['MV_PAR02'][1] + "'"
+
+		// If !Empty(jParams['MV_PAR04'][1])
+		// 	cWhere += " AND SC5.C5_EMISSAO = '" + jParams['MV_PAR04'][1] + "'"
+		// Endif
+
+		If oFilter:hasFilter()
+			cWhere += " AND " + oFilter:getSQLExpression()
+		Endif
+
+		cWhere += " AND SC5.D_E_L_E_T_ = ' '"
+
+		//Define a query do Objeto de Negócio
+		cQuery := "SELECT #QueryFields# FROM " + RetSQLName("SC5") +  " SC5 WHERE #QueryWhere#"
+
+		//Define a quantidade máxima por página (Default 100)
+		self:setPageSize(500)
+		//Define a query do Objeto de Negócio
+		self:setQuery(cQuery)
+		//Define o campo de ordenação da query
+		self:setOrder("C5_NUM")
+		//Define o where da query
+		self:setWhere(cWhere)
+
+		FwFreeObj(jParams)
+	endIf
+return self:oData
+
+/*/{Protheus.doc} PedidosTReportsBusinessObject::getSchema() as object
+Método responsavel por obter os metadados do relatorio.
+
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Schema de campos
+/*/
+method getSchema() as object class PedidosTReportsBusinessObject
+	self:aliasToSchema("SC5" , {"C5_NUM", "C5_CLIENTE", "C5_LOJACLI", "C5_EMISSAO", "C5_VEND1"})
+	// Adicionar uma parametro Lógico
+	self:addParameter("ISOPEN", "Apenas pedidos em aberto?",    "boolean",  .F.)
+return self:oSchema

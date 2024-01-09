@@ -4,7 +4,7 @@
 
 namespace custom.sv.exemplos.xisto.integratedprovider
 
-@totvsFrameworkTReportsIntegratedProvider(active=.T., team="SIGAFAT", tables="SA1", name="Materiais", country="ALL", initialRelease="12.1.2310")
+@totvsFrameworkTReportsIntegratedProvider(active=.T., team="SIGAFAT", tables="SA1", name="Framework", country="ALL", initialRelease="12.1.2310")
 class XistoTReportsBusinessObject from totvs.framework.treports.integratedprovider.IntegratedProvider
 	public method new() as object
     public method getAreas() as array
@@ -49,7 +49,7 @@ Obtem o nome dos modulos relacionados ao relatorio.
 @return array, Lista com o nome dos modulos
 /*/
 method getAreas() as array class XistoTReportsBusinessObject
-return {"Faturamento"}
+return {"Framework"}
 
 /*/{Protheus.doc} XistoTReportsBusinessObject::getData(nPage as numeric, oFilter as object) as object
 Método responsavel por obter os dados do relatorio.
