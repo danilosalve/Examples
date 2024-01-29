@@ -1,0 +1,171 @@
+#include 'fw-tlpp-core.th'
+#include "protheus.ch"
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} INCSchedAuto 
+Exemplo de Inclusão de Agendamento Automático do SCHEDULE.
+@author  TOTVS Framework
+@since   15/01/2024
+@version 1.0
+/*/
+//-------------------------------------------------------------------
+function INCSchedAuto()
+	local cEnv as Character
+	local oScheduleAuto as object
+
+	RpcSetEnv("T1", "D MG 01 ", "admin", "1234")
+	cEnv := GetEnvServer()
+
+	oScheduleAuto := totvs.framework.schedule.automatic():new()
+
+	// Dados do Agendamento
+	oScheduleAuto:setRoutine("MATR110")
+	oScheduleAuto:setFirstExecution(CTOD("01/03/2024"),TIME())
+    oScheduleAuto:setEnvironment(cEnv, {{"T1",{"D MG 01 ","D MG 02 "}}})
+	oScheduleAuto:setModule(5)
+	oScheduleAuto:setUser("000000")
+	oScheduleAuto:setDescription("Schedule Automático")
+	oScheduleAuto:setParams(getParams(1))
+	oScheduleAuto:setPrintParams("Impressao Automatica", 1, "arquivo")
+    oScheduleAuto:setRecurrence(.T.) // É uma tarefa recorrente? Sim
+
+	// Definição de periodicidade - Diario - Inicio as 08:00
+	if oScheduleAuto:setPeriod("D",/*dia inicial (mensal)*/, 8, 0)
+		// Definição de frequência - A cada 1 hora até as 23:59
+		if oScheduleAuto:setFrequency("H", 1,/*dia inicial*/, 23, 59)
+            oScheduleAuto:setDiscard(.T.) // Descartar tarefas atrasadas? - Sim
+			// Dispara Criação do Agendamento
+			if oScheduleAuto:createSchedule()
+				ConOut("/* * * * * * * * * * * * * * * * * * * * */")
+				ConOut("/*  INCLUSÃO DO AGENDAMENTO COM SUCESSO  */")
+				ConOut("/* * * * * * * * * * * * * * * * * * * * */")
+			else
+				ConOut("CREATE ERROR: "+ oScheduleAuto:getErrorMessage())
+			endIf
+        else
+            ConOut("CREATE ERROR: Frequencia inválida")
+		endIf
+    else
+        ConOut("CREATE ERROR: Periodo inválido")
+	endIf
+return
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} ALTSchedAuto 
+Exemplo de Alteração de Agendamento Automático do SCHEDULE.
+ 
+@author  TOTVS Framework
+@since   15/01/2024
+@version 1.0
+/*/
+//-------------------------------------------------------------------
+Function ALTSchedAuto()
+	local aSchedules    as array
+	local cEnv          as Character
+	local oScheduleAuto as object
+
+	RpcSetEnv("T1", "D MG 01 ", "admin", "1234") // informações do seu ambiente
+	cEnv := GetEnvServer()
+	aSchedules := totvs.framework.schedule.utils.getSchedsByRotine("MATR110") // Busca do código do Agendamento para o MATR110
+
+	if !Empty(aSchedules)
+		oScheduleAuto := totvs.framework.schedule.automatic():new()
+		// Indica o Agendamento a ser alterado
+		oScheduleAuto:setSchedule(aSchedules[1])
+		// Define Empresa e Filial de execução.
+		oScheduleAuto:setEnvironment(cEnv,{{"T1",{"D MG 01 ","D MG 02 "}},{"T2",{"A1IP 01 ","A1IP 02 "}}})
+		// Define os Parâmetros
+		oScheduleAuto:setParams(getParams(2))
+		// Define se o Agendamento pode ser alterado pelo usuário.
+		oScheduleAuto:setManageable(.F.)
+        oScheduleAuto:setDiscard(.F.) // Descartar tarefas atrasadas? - Sim
+		// Dispara Alteração do Agendamento
+		if oScheduleAuto:updateSchedule()
+			ConOut("/* * * * * * * * * * * * * * * * * * * * */")
+			ConOut("/*  ALTERAÇÃO DO AGENDAMENTO COM SUCESSO */")
+			ConOut("/* * * * * * * * * * * * * * * * * * * * */")
+		else
+			ConOut("UPDATE ERROR: "+oScheduleAuto:getErrorMessage())
+		endIf
+	endIf
+return
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} DELSchedAuto
+ Exemplo de Exclusão de Agendamento Automático do SCHEDULE.
+ 
+@author  TOTVS Framework
+@since   15/01/2024
+@version 1.0
+/*/
+//-------------------------------------------------------------------
+Function DELSchedAuto()
+	local aSchedules    as array
+	local cEnv          as Character
+	local oScheduleAuto as object
+
+	RpcSetEnv("T1", "D MG 01 ", "admin", "1234") // informações do seu ambiente
+	cEnv := GetEnvServer()
+	aSchedules := totvs.framework.schedule.utils.getSchedsByRotine("MATR110") // Busca do código do Agendamento para o MATR110
+
+	if !Empty(aSchedules)
+		oScheduleAuto := totvs.framework.schedule.automatic():new()
+		// Indica o Agendamento a ser excluído
+		oScheduleAuto:setSchedule(aSchedules[1])
+		// Dispara Exclusão do Agendamento
+		if oScheduleAuto:deleteSchedule()
+			Conout("/* * * * * * * * * * * * * * * * * * * * */")
+			Conout("/*  EXCLUSÃO DO AGENDAMENTO COM SUCESSO  */")
+			ConOut("/* * * * * * * * * * * * * * * * * * * * */")
+		else
+			ConOut("DELETE ERROR: "+oScheduleAuto:getErrorMessage())
+		endIf
+	endIf
+Return
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} getParams 
+Montagem dos parâmetros da rotina MATR110.
+ 
+@return aParams - Array com as respostas dos MV_PAR's. 
+@author  TOTVS Framework
+@since   15/01/2024
+@version 1.0
+/*/
+//-------------------------------------------------------------------
+static function getParams(nType as numeric)
+	local aParams as array
+	aParams := Array(0)
+
+	if nType == 1
+		aAdd(aParams, "000001")         // MV_PAR01
+		aAdd(aParams, "999999")         // MV_PAR02
+		aAdd(aParams, SToD("20110101")) // MV_PAR03
+		aAdd(aParams, SToD("20111231")) // MV_PAR04
+		aAdd(aParams, 2)                // MV_PAR05
+		aAdd(aParams, "C7_DESCRI")      // MV_PAR06
+		aAdd(aParams, 1)                // MV_PAR07
+		aAdd(aParams, 1)                // MV_PAR08
+		aAdd(aParams, 3)                // MV_PAR09
+		aAdd(aParams, 1)                // MV_PAR10
+		aAdd(aParams, 1)                // MV_PAR11
+		aAdd(aParams, 1)                // MV_PAR12
+		aAdd(aParams, "")               // MV_PAR13
+		aAdd(aParams, 1)                // MV_PAR14
+	elseIf nType == 2
+		aAdd(aParams, "000001")         // MV_PAR01
+		aAdd(aParams, "000100")         // MV_PAR02
+		aAdd(aParams, SToD("20110101")) // MV_PAR03
+		aAdd(aParams, SToD("20991231")) // MV_PAR04
+		aAdd(aParams, 2)                // MV_PAR05
+		aAdd(aParams, "C7_PRODUTO")     // MV_PAR06
+		aAdd(aParams, 2)                // MV_PAR07
+		aAdd(aParams, 2)                // MV_PAR08
+		aAdd(aParams, 3)                // MV_PAR09
+		aAdd(aParams, 2)                // MV_PAR10
+		aAdd(aParams, 2)                // MV_PAR11
+		aAdd(aParams, 2)                // MV_PAR12
+		aAdd(aParams, "")               // MV_PAR13
+		aAdd(aParams, 2)                // MV_PAR14
+	endIf
+return aParams

@@ -61,9 +61,5 @@ User Function DSPropCom()
     Else
         Conout( "Proposta incluída com sucesso.!" )
     EndIf
-
-RpcClearEnv()
-
-
     
-Return Nil
+return Nil

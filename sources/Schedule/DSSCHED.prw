@@ -22,12 +22,14 @@ function DsSched()
 	conOut(" ############ DSSCHED ############### ")
 	conOut(" ############ " + Time() + " ############## ")
 	conOut(" #### EMPRESA : " + cEmpAnt + " ################## ")
-	conOut(" #### FILIAL : " + cFilAnt + " ############# ")	
+	conOut(" #### FILIAL : " + cFilAnt + " ############# ")
+	conOut(" #################################### ")
+	conOut(" #### DATA : " + DTOC(Date()) + " ############### ")
 
-    If lLog
+    If lLog .and. !Empty(cLog)
 	    conOut(" #################################### ")
 	    conOut(" ########## MESSAGEM DE LOG ######### ")
-	    conOut( cLog )
+	    conOut(" ## " + cLog + " ## ")
 	    conOut(" ########## FIM MSG DE LOG ########## ")
 	    conOut(" #################################### ")
     Endif
