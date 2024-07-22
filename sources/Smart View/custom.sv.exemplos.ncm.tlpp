@@ -1,0 +1,93 @@
+#include "msobject.ch"
+#include "totvs.framework.treports.integratedprovider.th"
+
+namespace custom.sv.exemplos.ncm.integratedprovider
+
+/*/{Protheus.doc} NCMTReportsBusinessObjectData
+Exemplo de objeto de negocio utilizando o método aliasToSchema
+
+@type class
+@verion 1.0
+@author Danilo Salve
+@since 22/07/2024
+
+/*/
+@totvsFrameworkTReportsIntegratedProvider(active=.T., team="SIGAFAT", tables="SYD", name="Framework", country="ALL", initialRelease="12.1.2310")
+class NCMTReportsBusinessObjectData from totvs.framework.treports.integratedprovider.IntegratedProvider
+	public method new() as object
+	public method getData() as object
+    public method getDescription() as character
+    public method getDisplayName() as character
+	public method getSchema() as object
+endclass
+
+/*/{Protheus.doc} NCMTReportsBusinessObjectData::new
+Método construtor da classe.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 22/07/2024
+@return object, nova instancia do objeto.
+/*/
+method new() class NCMTReportsBusinessObjectData
+	_Super:new()
+
+    //Define a Área
+	self:appendArea("Framework")
+return self
+
+//-------------------------------------------------------------------
+/*{Protheus.doc} getDisplayName
+Retorna o nome de exibição do objeto de negócio
+ 
+@return string
+ 
+@author Vanessa Ruama
+@since 02/03/2023
+@version 1.0
+*/
+//-------------------------------------------------------------------   
+method getDisplayName() as character class NCMTReportsBusinessObjectData
+return "NCM - TESTE"
+ 
+//-------------------------------------------------------------------
+/*{Protheus.doc} getDescription
+Retorna a descrição do objeto de negócio
+ 
+@return string
+ 
+@author Vanessa Ruama
+@since 02/03/2023
+@version 1.0
+*/
+//-------------------------------------------------------------------  
+method getDescription() as character class NCMTReportsBusinessObjectData
+return "NCM - TESTE ALIASTOSCHEMA"
+
+/*/{Protheus.doc} NCMTReportsBusinessObjectData::getData(nPage as numeric, oFilter as object) as object
+Método responsavel por obter os dados do relatorio.
+
+@type method
+@version 1.0
+@author Danilo Salve
+@since 22/07/2024
+@return object, dados do relatório
+/*/
+method getData(nPage as numeric, oFilter as object) as object class NCMTReportsBusinessObjectData
+    //Define a quantidade máxima por página (Default 100)
+	self:setPageSize(500) //Setar antes de fazer o aliasToData()
+	self:aliasToData("SYD", oFilter)
+return self:oData
+
+/*/{Protheus.doc} NCMTReportsBusinessObjectData::getSchema() as object
+Método responsavel por obter os metadados do relatorio.
+
+@type method
+@version 1.0
+@author Danilo Salve
+@since 22/07/2024
+@return object, schema de campos
+/*/
+method getSchema() as object class NCMTReportsBusinessObjectData
+	self:aliasToSchema("SYD")
+return self:oSchema
