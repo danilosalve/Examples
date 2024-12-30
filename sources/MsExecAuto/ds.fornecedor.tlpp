@@ -1,0 +1,52 @@
+#include 'fw-tlpp-core.th'
+#include 'protheus.ch'
+
+user function DsFornecedor()
+    Local cCodigo   := "DS0001" as character
+    Local cNome     as character
+    Local nFornece  := 0 as integer
+
+    RpcSetEnv( "T1", "D MG 01", "ADMIN" )
+
+    For nFornece := 1 to 1000
+        cCodigo := Soma1(cCodigo)
+        cNome := "Fornecedor " + cValtoChar(nFornece)
+
+        if !cadastrarFornecedor(cCodigo, cNome)
+            conout("falha ao cadastrar fornecedor" + cCodigo + " - " + cNome)
+            exit
+        endif
+    next nFornece    
+
+    RpcClearEnv()
+return nil
+
+static function cadastrarFornecedor(cCodigo as character, cNome as character) as logical
+    local lCadastrou := .f. as logical
+    local oModel as object
+    local oSA2  as object
+
+    oModel := FWLoadModel("MATA020M")
+    oModel:SetOperation(3)
+    oModel:Activate()
+    
+    oSA2:= oModel:getModel("SA2MASTER")
+
+    oSA2:setValue("A2_COD", cCodigo)
+    oSA2:setValue("A2_LOJA", "01")
+    oSA2:setValue("A2_NOME", cNome)
+    oSA2:setValue("A2_NREDUZ", cCodigo)
+    oSA2:setValue("A2_END", "RUA DO TESTE, 999")
+    oSA2:setValue("A2_EST", "SP")
+    oSA2:setValue("A2_COD_MUN", "50308")
+    oSA2:setValue("A2_TIPO", "J")
+
+    If oModel:VldData() .and. oModel:CommitData() 
+        lCadastrou := .T.     
+    EndIf
+
+    oModel:DeActivate()
+
+    FwFreeObj(oModel)
+    FwFreeObj(oSA2)
+return lCadastrou
