@@ -12,7 +12,6 @@
 /*/
 //-------------------------------------------------------------------
 Function DSbubble()
-
     Local aVetor:= {8, 9, 3, 5, 1, 20, 2, 34, 99,12}    
 
     ImpVetor(aVetor, "Vetor desordenado: ")
@@ -23,7 +22,6 @@ Function DSbubble()
 
     aSize(aVetor,0)
     aVetor := {}
-
 Return Nil
 
 //-------------------------------------------------------------------
@@ -40,7 +38,6 @@ Return Nil
 //-------------------------------------------------------------------
 
 Static Function ImpVetor(aVetor, cTitulo)
-
     Local nI    := 0
 
     Conout(" ")
@@ -56,7 +53,6 @@ Static Function ImpVetor(aVetor, cTitulo)
     Conout(" ")
     Conout("===============================")
     Conout(" ")
-
 
 Return Nil
 
@@ -74,7 +70,6 @@ Return Nil
 //-------------------------------------------------------------------
 
 Static Function bubbleSort(aVetor)
-
     Local nI    := 0
     Local nJ    := 0
     Local nAux  := 0

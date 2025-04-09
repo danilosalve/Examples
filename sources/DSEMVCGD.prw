@@ -34,8 +34,7 @@ Exemplo de ExecAuto MVC com Grid
 @version	12.1.23
 /*/
 
-Static Function DSFAT310(lInclui , lAltera , lExclui , 	nItem)
-
+Static Function DSFAT310(lInclui , lAltera , lExclui , nItem)
 	Local aErro		:= {}
 	Local lRet		:= .T.
 	Local nI		:= 0
@@ -123,7 +122,6 @@ Return lRet
 
 
 Static Function DSDELALL()
-
 	Local aCabec	:= {}
 	Private aRotina			:= FWMVCMenu( 'FATA310' )
 
@@ -141,6 +139,5 @@ Static Function DSDELALL()
 
 		AD5->(DbSkip())
 	Enddo
-
 
 Return Nil

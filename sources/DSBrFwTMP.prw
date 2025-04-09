@@ -13,7 +13,6 @@
 /*/
 //-----------------------------------------------------------
 Function DSBrFwTmp()
-
     Local aFields       := {}
     Local aColumns      := GetColumns( "SF1" , @aFields )
     Local aSeek	        := {}
@@ -102,7 +101,6 @@ Return Nil
 /*/
 //------------------------------------------------------------------------------
 Static Function GetColumns( cAlias, aFields , lMark )
-
     Local aAreaSX3  := SX3->( GetArea() )
     Local aColumns  := {}    
     Local nLinha    := 0
@@ -144,7 +142,6 @@ Static Function GetColumns( cAlias, aFields , lMark )
 
     RestArea( aAreaSX3 )
     aSize( aAreaSX3,0 )
-
 Return aColumns
 
 //------------------------------------------------------------------------------
@@ -163,7 +160,6 @@ Return aColumns
 /*/
 //------------------------------------------------------------------------------
 Static Function GetQuery( cAlias, aFields, lMark )
-
     Local cQuery    := " SELECT "
     Local nI        := 0
 
@@ -204,7 +200,6 @@ Static Function GetQuery( cAlias, aFields, lMark )
 	EndIf
 
     cQuery := ChangeQuery( cQuery )
-
 Return cQuery
 
 //------------------------------------------------------------------------------
