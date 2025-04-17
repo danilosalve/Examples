@@ -10,27 +10,26 @@ Teste Dialog com Panel
 //-------------------------------------------------------------------
 
 Function TestePanel()
-
-    Local cTGet01       := Space(60)
-    Local oTButton1     := Nil
-    Local oCheck01      := Nil
-    Local oCheck02      := Nil
-    Local oCheck03      := Nil
-    Local oCheck04      := Nil
-    Local oCheck05      := Nil
-    Local oCheck06      := Nil
-    Local oCheck07      := Nil
-    Local oCheck08      := Nil
-    Local oCheck09      := Nil
-    Local oCheck10      := Nil
-    Local oDlg          := Nil
-    Local oGroup01      := Nil
-    Local oGroup02      := Nil
-    Local oGroup03      := Nil
-    Local oPanel01      := Nil
-    Local oPanel02      := Nil
-    Local oPanel03      := Nil
-    Local oTGet01       := Nil
+    Local cTGet01   := Space(60)
+    Local oTButton1 as object
+    Local oCheck01  as object
+    Local oCheck02  as object
+    Local oCheck03  as object
+    Local oCheck04  as object
+    Local oCheck05  as object
+    Local oCheck06  as object
+    Local oCheck07  as object
+    Local oCheck08  as object
+    Local oCheck09  as object
+    Local oCheck10  as object
+    Local oDlg      as object
+    Local oGroup01  as object
+    Local oGroup02  as object
+    Local oGroup03  as object
+    Local oPanel01  as object
+    Local oPanel02  as object
+    Local oPanel03  as object
+    Local oTGet01   as object
     Local lCheck01      := .F.
     Local lCheck02      := .F.
     Local lCheck03      := .F.
@@ -62,7 +61,8 @@ Function TestePanel()
     oCheck10 := TCheckBox():New( 025, 010, "Teste",{ |u| if(PCount()>0, lCheck10:=u, lCheck10) }, oPanel03, 050, 010,,,,,,,,.T.,,,)    
     oTButton1 := TButton():New( 265, 010, "Sair" , oDlg, { || oDlg:End() }, 040, 010,,,.F.,.T.,.F.,,.F.,,,.F. )
     
-    oDlg:Activate(,,, .T. ,,,)    
+    oDlg:Activate(,,, .T. ,,,)
+    
     Freeobj(oTButton1)
     Freeobj(oTGet01)
     Freeobj(oPanel03)
@@ -82,5 +82,4 @@ Function TestePanel()
     Freeobj(oGroup02)
     Freeobj(oGroup01)
     Freeobj(oDlg)
-
 Return Nil

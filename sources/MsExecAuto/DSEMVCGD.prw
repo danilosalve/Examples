@@ -22,7 +22,6 @@ User Function DSEMVCGD()
 
 	DSDELALL()
 
-
 	RESET ENVIRONMENT
 		
 Return Nil

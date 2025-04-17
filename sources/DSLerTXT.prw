@@ -12,7 +12,6 @@
 /*/
 //-------------------------------------------------------------------
 Function DSLerTxt()
-
     Local cArquivo      := "compilar.txt"
     Local cDiretorio    := "C:\TOTVS\workspace\VsCode\ADVPR\"
     
@@ -27,7 +26,6 @@ Function DSLerTxt()
     Conout( "Inicio: " + Time() )
     LeArquivo2( cDiretorio + cArquivo )
     Conout( "Fim: " + Time() )
-
 Return Nil
 
 //-------------------------------------------------------------------
@@ -43,7 +41,6 @@ Return Nil
 //-------------------------------------------------------------------
 
 Static function LeArquivo1( cFile )
-
     Local oFile := Nil
 
     oFile := FWFileReader():New( cFile )
@@ -63,7 +60,6 @@ Static function LeArquivo1( cFile )
     Else
         Conout( "Não foi possivel abrir o arquivo " )
     Endif
-
 Return
 
 
@@ -80,7 +76,6 @@ Return
 //-------------------------------------------------------------------
 
 Static function LeArquivo2( cFile )
-
     Local cLine     := ""
     Local nHandle   := 0
     Local nRecno    := 0    
@@ -110,5 +105,4 @@ Static function LeArquivo2( cFile )
     Else        
         Conout( "Não foi possivel abrir o arquivo "  + CValToChar( FError() ) )
     Endif
-
 Return Nil

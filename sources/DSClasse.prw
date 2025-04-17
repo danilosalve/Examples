@@ -100,10 +100,10 @@ Return Self:lActive
 Method Destroy() Class DSClasse
 
     aSize(Self:aEndereco, 0)
+
     Self:aEndereco  := Nil
     Self:cNome      := Nil
     Self:cSobreNome := Nil
     Self:nIdade     := Nil
     Self:lActive    := .F.
-    
 Return 

@@ -10,7 +10,6 @@ Exemplo de utlização da Classe THashMap
 //-------------------------------------------------------------------
 
 Function DSHashMap()
-
     Local aArray := {}
     Local cKey   := ""
     Local lRet   := .T.
@@ -67,5 +66,4 @@ Function DSHashMap()
     ASize( aArray, 0 )
     FreeObj( oList )
     FreeObj( oHash )
-
 Return Nil

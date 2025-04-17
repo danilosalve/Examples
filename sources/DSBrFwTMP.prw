@@ -13,76 +13,76 @@
 /*/
 //-----------------------------------------------------------
 Function DSBrFwTmp()
-    Local aFields       := {}
-    Local aColumns      := GetColumns( "SF1" , @aFields )
-    Local aSeek	        := {}
-    Local aIndex	    := GetIndex( "SF1" , @aSeek )
-    Local aSize		    := FWGetDialogSize( oMainWnd )
-    Local aStructSF1    := {{ "MARK","C",2,0 }}
-    Local aStrtSF1      := SF1->( DBStruct() )    
-    Local bBtnForn      := {||IIF( A410Check( cAlias, cMarca ), ( MarkOk( cAlias ), oDlgDev:End() ), Help( "", 1, "HELP",, OemToAnsi( STR0187 ), 1, 0 ) ) }
-    Local cAlias        := GetNextAlias()
-    Local cAliasT       := GetNextAlias()
-    Local cMarca	    := GetMark()
-    Local cQuery        := GetQuery( "SF1", aFields, .T. )
-    Local cIndex        := ""    
-    Local nX            := 0    
-    Local oDlgDev       := Nil
-    Local oMBrowse      := Nil
-    Local oTempTable    := Nil
-    
-    oTempTable := FWTemporaryTable():New( cAlias )
+	Local aFields       := {}
+	Local aColumns      := GetColumns( "SF1" , @aFields )
+	Local aSeek	        := {}
+	Local aIndex	    := GetIndex( "SF1" , @aSeek )
+	Local aSize		    := FWGetDialogSize( oMainWnd )
+	Local aStructSF1    := {{ "MARK","C",2,0 }}
+	Local aStrtSF1      := SF1->( DBStruct() )
+	Local bBtnForn      := {||IIF( A410Check( cAlias, cMarca ), ( MarkOk( cAlias ), oDlgDev:End() ), Help( "", 1, "HELP",, OemToAnsi( STR0187 ), 1, 0 ) ) }
+	Local cAlias        := GetNextAlias()
+	Local cAliasT       := GetNextAlias()
+	Local cMarca	    := GetMark()
+	Local cQuery        := GetQuery( "SF1", aFields, .T. )
+	Local cIndex        := ""
+	Local nX            := 0
+	Local oDlgDev       := Nil
+	Local oMBrowse      := Nil
+	Local oTempTable    := Nil
 
-    For nX := 1 To Len( aStrtSF1 )
-        aAdd(aStructSF1 ,  aStrtSF1[nX] )
-    Next nX
+	oTempTable := FWTemporaryTable():New( cAlias )
 
-    oTemptable:SetFields( aStructSF1 )
+	For nX := 1 To Len( aStrtSF1 )
+		aAdd(aStructSF1 ,  aStrtSF1[nX] )
+	Next nX
 
-    For nX := 1 To Len( aIndex )
-        oTempTable:AddIndex(cValtochar(aIndex[nX,1]), aIndex[nX,2] )   
-    Next nX    
+	oTemptable:SetFields( aStructSF1 )
 
-    oTempTable:Create()
+	For nX := 1 To Len( aIndex )
+		oTempTable:AddIndex(cValtochar(aIndex[nX,1]), aIndex[nX,2] )
+	Next nX
 
-    DBUseArea( .T., "TOPCONN", TcGenQry(,, cQuery ), cAliasT, .T., .T. )
-    LoadTmp( oTempTable:GetRealName() , aStructSF1, cAliasT , cAlias )
-    
-    oDlgDev := MSDialog():New( aSize[1], aSize[2], aSize[3], aSize[4], OemToAnsi( STR0098 ) ,,,, nOr( WS_VISIBLE, WS_POPUP ),,,,, .T. ,,,, .T. ) //"Retorno de Doctos. de Entrada"
-    oMBrowse := FWFormBrowse():New()
-    oMBrowse:SetDescription( OemToAnsi( STR0098 ) ) //"Retorno de Doctos. de Entrada"
-    oMBrowse:AddMarkColumn({|| IIF( ( cAlias )->MARK == cMarca, "LBOK", "LBNO") },{|| SetMarK( cAlias, cMarca ) },{|| SetMarkAll( cAlias, cMarca ) , oMBrowse:Refresh() })
-    oMBrowse:SetOwner( oDlgDev )
-    oMBrowse:SetDataQuery( .F. )
-    oMBrowse:SetDataTable( .T. )
-    oMBrowse:SetAlias( cAlias )
-    oMBrowse:SetColumns( aColumns )
-    oMBrowse:SetTemporary( .T. )
-    oMBrowse:SetMenuDef( "" )
-    oMBrowse:SetProfileID( "BRW_A410DEV" )
-    oMBrowse:SetUseFilter( .T. )
+	oTempTable:Create()
 
-    If Len(aSeek) > 0
-        oMBrowse:SetSeek( Nil, aSeek )
-    Endif
-    
-    oMBrowse:AddButton( OemtoAnsi(STR0053), bBtnForn, 0, 4, 0,,,,,{ OemtoAnsi( STR0053 ) }) //"Retornar"
-    oMBrowse:DisableDetails()
-    oMBrowse:DisableReports()
-    oMBrowse:Activate()
-    oDlgDev:Activate(,,,.T.)   
-    
-    oTempTable:Delete() 
+	DBUseArea( .T., "TOPCONN", TcGenQry(,, cQuery ), cAliasT, .T., .T. )
+	LoadTmp( oTempTable:GetRealName() , aStructSF1, cAliasT , cAlias )
 
-    aSize( aFields, 0 )
-    aSize( aColumns, 0 )
-    aSize( aSeek, 0 )
-    aSize( aIndex, 0 )
-    aSize( aSize, 0 )
-    aSize( aStructSF1, 0 )
-    aSize( aStrtSF1, 0 )
-    FreeObj( oMBrowse )
-    FreeObj( oDlgDev )
+	oDlgDev := MSDialog():New( aSize[1], aSize[2], aSize[3], aSize[4], OemToAnsi( STR0098 ) ,,,, nOr( WS_VISIBLE, WS_POPUP ),,,,, .T. ,,,, .T. ) //"Retorno de Doctos. de Entrada"
+	oMBrowse := FWFormBrowse():New()
+	oMBrowse:SetDescription( OemToAnsi( STR0098 ) ) //"Retorno de Doctos. de Entrada"
+	oMBrowse:AddMarkColumn({|| IIF( ( cAlias )->MARK == cMarca, "LBOK", "LBNO") },{|| SetMarK( cAlias, cMarca ) },{|| SetMarkAll( cAlias, cMarca ) , oMBrowse:Refresh() })
+	oMBrowse:SetOwner( oDlgDev )
+	oMBrowse:SetDataQuery( .F. )
+	oMBrowse:SetDataTable( .T. )
+	oMBrowse:SetAlias( cAlias )
+	oMBrowse:SetColumns( aColumns )
+	oMBrowse:SetTemporary( .T. )
+	oMBrowse:SetMenuDef( "" )
+	oMBrowse:SetProfileID( "BRW_A410DEV" )
+	oMBrowse:SetUseFilter( .T. )
+
+	If Len(aSeek) > 0
+		oMBrowse:SetSeek( Nil, aSeek )
+	Endif
+
+	oMBrowse:AddButton( OemtoAnsi(STR0053), bBtnForn, 0, 4, 0,,,,,{ OemtoAnsi( STR0053 ) }) //"Retornar"
+	oMBrowse:DisableDetails()
+	oMBrowse:DisableReports()
+	oMBrowse:Activate()
+	oDlgDev:Activate(,,,.T.)
+
+	oTempTable:Delete()
+
+	aSize( aFields, 0 )
+	aSize( aColumns, 0 )
+	aSize( aSeek, 0 )
+	aSize( aIndex, 0 )
+	aSize( aSize, 0 )
+	aSize( aStructSF1, 0 )
+	aSize( aStrtSF1, 0 )
+	FreeObj( oMBrowse )
+	FreeObj( oDlgDev )
 
 Return Nil
 
@@ -101,47 +101,47 @@ Return Nil
 /*/
 //------------------------------------------------------------------------------
 Static Function GetColumns( cAlias, aFields , lMark )
-    Local aAreaSX3  := SX3->( GetArea() )
-    Local aColumns  := {}    
-    Local nLinha    := 0
+	Local aAreaSX3  := SX3->( GetArea() )
+	Local aColumns  := {}
+	Local nLinha    := 0
 
-    Default lMark   := .F.   
-    Default aFields := {}
-    
-    If lMark
-        aAdd(aColumns, FWBrwColumn():New() )
-        aColumns[1]:SetData(&( "{ || MARK }") )
-        aColumns[1]:SetTitle( "  " )
-        aColumns[1]:SetType( "C" )
-        aColumns[1]:SetSize( 2 )
-        aColumns[1]:SetDecimal( 0 ) 
-    Endif
+	Default lMark   := .F.
+	Default aFields := {}
 
-    SX3->( DbSetOrder(1) )
-    SX3->( DbSeek(cAlias) )
-    While SX3->( !Eof() ) .And. SX3->X3_ARQUIVO == cAlias
-        If X3Uso( SX3->X3_USADO ) .And. SX3->X3_BROWSE == "S" .And. SX3->X3_CONTEXT <> "V" .And. SX3->X3_TIPO <> "M"            
-            aAdd( aColumns, FWBrwColumn():New() )
-            aAdd( aFields,SX3->X3_CAMPO )
-            nLinha := Len( aColumns )
+	If lMark
+		aAdd(aColumns, FWBrwColumn():New() )
+		aColumns[1]:SetData(&( "{ || MARK }") )
+		aColumns[1]:SetTitle( "  " )
+		aColumns[1]:SetType( "C" )
+		aColumns[1]:SetSize( 2 )
+		aColumns[1]:SetDecimal( 0 )
+	Endif
 
-            If Empty(X3CBox())
+	SX3->( DbSetOrder(1) )
+	SX3->( DbSeek(cAlias) )
+	While SX3->( !Eof() ) .And. SX3->X3_ARQUIVO == cAlias
+		If X3Uso( SX3->X3_USADO ) .And. SX3->X3_BROWSE == "S" .And. SX3->X3_CONTEXT <> "V" .And. SX3->X3_TIPO <> "M"
+			aAdd( aColumns, FWBrwColumn():New() )
+			aAdd( aFields,SX3->X3_CAMPO )
+			nLinha := Len( aColumns )
+
+			If Empty(X3CBox())
 				aColumns[nLinha]:SetData( &("{ || " + SX3->X3_CAMPO + " }" ))
 			Else
 				aColumns[nLinha]:SetData( &("{|| X3Combo('" + SX3->X3_CAMPO + "'," + SX3->X3_CAMPO+")}" ) )
 			EndIf
 
-            aColumns[nLinha]:SetTitle( X3Titulo() )
-            aColumns[nLinha]:SetType( SX3->X3_TIPO )
-            aColumns[nLinha]:SetSize( SX3->X3_TAMANHO )
-            aColumns[nLinha]:SetDecimal( SX3->X3_DECIMAL )
-            
-        EndIf
-        SX3->( DbSkip() )	
-    EndDo
+			aColumns[nLinha]:SetTitle( X3Titulo() )
+			aColumns[nLinha]:SetType( SX3->X3_TIPO )
+			aColumns[nLinha]:SetSize( SX3->X3_TAMANHO )
+			aColumns[nLinha]:SetDecimal( SX3->X3_DECIMAL )
 
-    RestArea( aAreaSX3 )
-    aSize( aAreaSX3,0 )
+		EndIf
+		SX3->( DbSkip() )
+	EndDo
+
+	RestArea( aAreaSX3 )
+	aSize( aAreaSX3,0 )
 Return aColumns
 
 //------------------------------------------------------------------------------
@@ -160,46 +160,46 @@ Return aColumns
 /*/
 //------------------------------------------------------------------------------
 Static Function GetQuery( cAlias, aFields, lMark )
-    Local cQuery    := " SELECT "
-    Local nI        := 0
+	Local cQuery    := " SELECT "
+	Local nI        := 0
 
-    Default cAlias  := ""
-    Default aFields := {}
-    Default lMark   := .F.
+	Default cAlias  := ""
+	Default aFields := {}
+	Default lMark   := .F.
 
-    If lMark
-        cQuery += " '  ' MARK, "
-    Endif
+	If lMark
+		cQuery += " '  ' MARK, "
+	Endif
 
-    If Len( aFields ) > 0
+	If Len( aFields ) > 0
 
-        For nI := 1 To Len( aFields )
-            cQuery += aFields[ nI ] + ", "
-        Next nI
+		For nI := 1 To Len( aFields )
+			cQuery += aFields[ nI ] + ", "
+		Next nI
 
-        cQuery := Substr( cQuery, 1, Len( cQuery )-2 )
+		cQuery := Substr( cQuery, 1, Len( cQuery )-2 )
 
-    Else
-        cQuery += " * "
-    Endif   
+	Else
+		cQuery += " * "
+	Endif
 
-    cQuery += " FROM " + RetSqlName( cAlias )    
-    cQuery += " WHERE F1_FILIAL = '" + xFilial( cAlias ) + "' "
+	cQuery += " FROM " + RetSqlName( cAlias )
+	cQuery += " WHERE F1_FILIAL = '" + xFilial( cAlias ) + "' "
 	cQuery += " AND F1_FORNECE = '000002' "
 	cQuery += " AND F1_LOJA    = '01' "
 	cQuery += " AND F1_DTDIGIT >= '20190101' "
 	cQuery += " AND F1_DTDIGIT <= '20191231' "
-	cQuery += " AND F1_STATUS  <> '" + Space( Len( SF1->F1_STATUS ) ) + "' "	
+	cQuery += " AND F1_STATUS  <> '" + Space( Len( SF1->F1_STATUS ) ) + "' "
 	cQuery += " AND F1_TIPO NOT IN ('D','B') "
-    cQuery += " AND D_E_L_E_T_ <> '*' "
-    cQuery += GetFilter()
-    cQuery += " ORDER BY " + ( cAlias )->( IndexKey() )
+	cQuery += " AND D_E_L_E_T_ <> '*' "
+	cQuery += GetFilter()
+	cQuery += " ORDER BY " + ( cAlias )->( IndexKey() )
 
-    If Existblock("A410RNF")
-		cQuery := ExecBlock("A410RNF",.F.,.F.,{ dDataDe, dDataAte, lForn, lFornece })				
+	If Existblock("A410RNF")
+		cQuery := ExecBlock("A410RNF",.F.,.F.,{ dDataDe, dDataAte, lForn, lFornece })
 	EndIf
 
-    cQuery := ChangeQuery( cQuery )
+	cQuery := ChangeQuery( cQuery )
 Return cQuery
 
 //------------------------------------------------------------------------------
@@ -216,24 +216,21 @@ Return cQuery
     @version	1.0
 /*/
 //------------------------------------------------------------------------------
-Static Function SetMarK( cAlias, cMarca )    
+Static Function SetMarK( cAlias, cMarca )
 
-    If ( cAlias )->( !Eof() )
+	If ( cAlias )->( !Eof() )
+		RecLock( cAlias, .F. )
 
-        RecLock( cAlias, .F. )
-	
-        If Empty( ( cAlias )->MARK )
-            ( cAlias )->MARK := cMarca
-        Else
-            ( cAlias )->MARK := "  "
-        Endif
+		If Empty( ( cAlias )->MARK )
+			( cAlias )->MARK := cMarca
+		Else
+			( cAlias )->MARK := "  "
+		Endif
 
-        ( cAlias )->( MsUnLock() )
-
-    Endif
+		( cAlias )->( MsUnLock() )
+	Endif
 
 Return Nil
-
 
 //------------------------------------------------------------------------------
 /*/{Protheus.doc} SetMarkAll
@@ -251,27 +248,27 @@ Return Nil
 //------------------------------------------------------------------------------
 Static Function SetMarkAll( cAlias, cMarca )
 
-    Local aAreaTmp := ( cAlias )->( GetArea() )  
-    
-    ( cAlias )->( DbGoTop() )
+	Local aAreaTmp := ( cAlias )->( GetArea() )
 
-    While ( cAlias )->( !Eof() )
+	( cAlias )->( DbGoTop() )
 
-        RecLock( cAlias, .F. )
-	
-        If Empty((cAlias)->MARK)
-            ( cAlias )->MARK := cMarca
-        Else
-            ( cAlias )->MARK := "  "
-        Endif
+	While ( cAlias )->( !Eof() )
 
-        ( cAlias )->( MsUnLock() )
-        ( cAlias )->( DbSkip() )
+		RecLock( cAlias, .F. )
 
-    Enddo
+		If Empty((cAlias)->MARK)
+			( cAlias )->MARK := cMarca
+		Else
+			( cAlias )->MARK := "  "
+		Endif
 
-    RestArea( aAreaTmp )
-    aSize( aAreaTmp, 0 )
+		( cAlias )->( MsUnLock() )
+		( cAlias )->( DbSkip() )
+
+	Enddo
+
+	RestArea( aAreaTmp )
+	aSize( aAreaTmp, 0 )
 
 Return Nil
 
@@ -290,16 +287,16 @@ Return Nil
 
 Static Function GetFilter()
 
-    Local cFilter	:= " " 
-    Local cConcat	:= "+"
+	Local cFilter	:= " "
+	Local cConcat	:= "+"
 
-    Local cFornece  := "000002"
-    Local cLoja     := "01"
+	Local cFornece  := "000002"
+	Local cLoja     := "01"
 
 	If Upper(TcGetDb()) $ "ORACLE,POSTGRES,DB2,INFORMIX"
 		cConcat := "||"
 	Endif
-	
+
 	cFilter += " AND F1_FILIAL+F1_DOC+F1_SERIE NOT IN ( "
 	cFilter += " SELECT D1_FILIAL "+ cConcat + " D1_DOC " + cConcat + " D1_SERIE FROM ( "
 	cFilter += " SELECT D1_FILIAL, D1_DOC, D1_SERIE, D1_FORNECE, SUM(D1_QUANT) D1_QUANT "
@@ -342,25 +339,23 @@ Return cFilter
 /*/
 //------------------------------------------------------------------------------
 Static Function A410Check( cAlias, cMarca )
+	Local aAreaTmp  := ( cAlias )->( GetArea() )
+	Local lReturn   := .F.
 
-    Local aAreaTmp  := ( cAlias )->( GetArea() )
-    Local lReturn   := .F.
-    
-    ( cAlias )->( DbGoTop() )
+	( cAlias )->( DbGoTop() )
 
-    While (cAlias)->(!Eof())
-	
-        If !Empty( (cAlias)->MARK )
-            lReturn := .T.
-            Exit
-        Endif
-        ( cAlias )->( DbSkip() )
+	While (cAlias)->(!Eof())
 
-    Enddo
+		If !Empty( (cAlias)->MARK )
+			lReturn := .T.
+			Exit
+		Endif
+		( cAlias )->( DbSkip() )
 
-    RestArea( aAreaTmp )
-    aSize( aAreaTmp, 0 )
+	Enddo
 
+	RestArea( aAreaTmp )
+	aSize( aAreaTmp, 0 )
 Return lReturn
 
 //------------------------------------------------------------------------------
@@ -377,45 +372,39 @@ Return lReturn
 /*/
 //------------------------------------------------------------------------------
 Static Function GetIndex( cAlias, aSeek )
+	Local aIndex    := {}
+	Local aIndexTmp := {}
+	Local aSeekTmp  := {}
+	Local cIndex    := ""
+	Local nX        := 1
+	Local nY        := 0
+	Local nAt       := 0
+	Local nRat      := 0
 
-    Local aIndex    := {}
-    Local aIndexTmp := {}
-    Local aSeekTmp  := {}
-    Local cIndex    := ""
-    Local nX        := 1
-    Local nY        := 0
-    Local nAt       := 0
-    Local nRat      := 0
+	Default cAlias  := ""
+	Default aSeek   := {}
 
-    Default cAlias  := ""
-    Default aSeek   := {}
+	If FWAliasInDic( cAlias )
+		cIndex := ( cAlias )->( IndexKey(nX) )
+		While !Empty( cIndex )
+			aIndexTmp := Separa( cIndex , "+" )
+			For nY := 1 To Len( aIndexTmp )
+				If "DTOS" $ aIndexTmp[nY]
+					nRat := Rat("(" , aIndexTmp[3]) + 1
+					nAt :=  At(")"  , aIndexTmp[3]) - nRat
+					aIndexTmp[nY] := Substring( aIndexTmp[3] , nRat ,nAt )
+				Endif
+			Next nY
+			aSeekTmp := GetSeek( aIndexTmp )
 
-    If FWAliasInDic( cAlias )
+			If Len( aSeekTmp ) > 0
+				aAdd( aSeek , aSeekTmp )
+			Endif
 
-        cIndex := ( cAlias )->( IndexKey(nX) )
-
-        While !Empty( cIndex )
-
-            aIndexTmp := Separa( cIndex , "+" )
-            For nY := 1 To Len( aIndexTmp )
-                If "DTOS" $ aIndexTmp[nY] 
-                    nRat := Rat("(" , aIndexTmp[3]) + 1
-                    nAt :=  At(")"  , aIndexTmp[3]) - nRat
-                    aIndexTmp[nY] := Substring( aIndexTmp[3] , nRat ,nAt )                    
-                Endif
-            Next nY
-            aSeekTmp := GetSeek( aIndexTmp )
-
-            If Len( aSeekTmp ) > 0
-                aAdd( aSeek , aSeekTmp )
-            Endif
-            
-            aAdd( aIndex , { nX++ , aIndexTmp })
-            cIndex := ( cAlias )->( IndexKey(nX) )
-        Enddo        
-
-    Endif
-
+			aAdd( aIndex , { nX++ , aIndexTmp })
+			cIndex := ( cAlias )->( IndexKey(nX) )
+		Enddo
+	Endif
 Return aIndex
 
 //------------------------------------------------------------------------------
@@ -431,33 +420,31 @@ Return aIndex
 /*/
 //------------------------------------------------------------------------------
 Static Function GetSeek(aIndex)
+	Local aSeek     := {}
+	Local aAreaSX3  := SX3->( GetArea() )
+	Local cNome     := ""
+	Local nDecimal  := 0
+	Local nI        := 0
+	Local nTamanho  := 0
 
-    Local aSeek     := {}
-    Local aAreaSX3  := SX3->( GetArea() )
-    Local cNome     := ""    
-    Local nDecimal  := 0
-    Local nI        := 0
-    Local nTamanho  := 0  
+	For nI := 1 To Len( aIndex )
+		DbSelectArea( "SX3" )
+		SX3->( DbSetOrder(2) )
+		If MsSeek( aIndex[nI] )
+			cNome += Alltrim( X3Titulo() ) + "+"
+			nTamanho += SX3->X3_TAMANHO
+			nDecimal += SX3->X3_DECIMAL
+		Endif
+	Next nI
 
-    For nI := 1 To Len( aIndex )
-        DbSelectArea( "SX3" )
-        SX3->( DbSetOrder(2) )
-        If MsSeek( aIndex[nI] )
-            cNome += Alltrim( X3Titulo() ) + "+"
-            nTamanho += SX3->X3_TAMANHO
-            nDecimal += SX3->X3_DECIMAL
-        Endif
-    Next nI
+	If !Empty(cNome)
+		cNome := Substring( cNome, 1, Len(cNome) - 1 )
+	Endif
 
-    If !Empty(cNome)
-        cNome := Substring( cNome, 1, Len(cNome) - 1 )
-    Endif    
+	aSeek := { cNome, {{"", "C", nTamanho, nDecimal, cNome,,}}}
 
-    aSeek := { cNome, {{"", "C", nTamanho, nDecimal, cNome,,}}}
-
-    RestArea( aAreaSX3 )
-    aSize( aAreaSX3, 0 )
-
+	RestArea( aAreaSX3 )
+	aSize( aAreaSX3, 0 )
 Return aSeek
 
 //------------------------------------------------------------------
@@ -473,29 +460,27 @@ no pedido de vendas
 /*/
 //-------------------------------------------------------------------
 Static Function MarkOk( cAlias )
+	Local aAreaTmp  := ( cAlias )->( GetArea() )
+	Local cDocSF1   := " "
 
-    Local aAreaTmp  := ( cAlias )->( GetArea() )
-    Local cDocSF1   := " "
+	(cAlias)->(DbGoTop())
 
-    (cAlias)->(DbGoTop())
+	While ( cAlias )->( !Eof() )
 
-    While ( cAlias )->( !Eof() )
+		If !Empty((cAlias)->MARK)
+			cDocSF1 += "( SD1.D1_DOC = '" + ( cAlias )->F1_DOC + "' AND SD1.D1_SERIE = '" + ( cAlias )->F1_SERIE + "' ) OR "
+		Endif
 
-        If !Empty((cAlias)->MARK)
-            cDocSF1 += "( SD1.D1_DOC = '" + ( cAlias )->F1_DOC + "' AND SD1.D1_SERIE = '" + ( cAlias )->F1_SERIE + "' ) OR "
-        Endif
+		(cAlias)->(DbSkip())
 
-        (cAlias)->(DbSkip())
+	Enddo
 
-    Enddo
-
-    If !Empty( cDocSF1 )		
-	    cDocSF1 := SubStr( cDocSF1 , 1, Len( cDocSF1 ) -3 ) + " )"
+	If !Empty( cDocSF1 )
+		cDocSF1 := SubStr( cDocSF1 , 1, Len( cDocSF1 ) -3 ) + " )"
 	EndIf
 
-    RestArea( aAreaTmp )
-    aSize( aAreaTmp, 0 )
-
+	RestArea( aAreaTmp )
+	aSize( aAreaTmp, 0 )
 Return Nil
 
 //------------------------------------------------------------------
@@ -512,79 +497,72 @@ Esta Função tem como objetivo carregar os dados da tabela temporaria
 /*/
 //-------------------------------------------------------------------
 Static Function LoadTmp( cAliasTmp , aStructSF1, cAliasT , cAlias)
+	Local aStructTmp    := ( cAliasT )->( DBStruct() )
+	Local cSQLInsert    := ""
+	Local nPos          := 0
+	Local nX            := 0
 
-    Local aStructTmp    := ( cAliasT )->( DBStruct() )    
-    Local cSQLInsert    := ""
-    Local nPos          := 0
-    Local nX            := 0
+	For nX := 1 To Len( aStructSF1 )
+		If aStructSF1[nX][2] $ "D#L#N"
+			TCSetField( cAliasT, aStructSF1[ nX, 1 ], aStructSF1[ nX, 2 ], aStructSF1[ nX, 3 ], aStructSF1[ nX, 4 ] )
+		EndIf
+	Next nX
 
-    For nX := 1 To Len( aStructSF1 )
-        If aStructSF1[nX][2] $ "D#L#N"
-            TCSetField( cAliasT, aStructSF1[ nX, 1 ], aStructSF1[ nX, 2 ], aStructSF1[ nX, 3 ], aStructSF1[ nX, 4 ] )
-        EndIf
-    Next nX
+	If TCGetDB() != "MSSQL"
+		cSQLInsert += " INSERT INTO " + cAliasTmp + " ( "
 
-    If TCGetDB() != "MSSQL"
+		For nX := 1 To Len( aStructTmp )
+			cSQLInsert += aStructTmp[ nX,1 ] + ", "
+		Next nX
 
-        cSQLInsert += " INSERT INTO " + cAliasTmp + " ( "
+		If !Empty( cSQLInsert )
+			cSQLInsert := Substring(cSQLInsert,1,Len(cSQLInsert)-2)
+		Endif
 
-        For nX := 1 To Len( aStructTmp )
-            cSQLInsert += aStructTmp[ nX,1 ] + ", "
-        Next nX
+		cSQLInsert += " ) VALUES "
 
-        If !Empty( cSQLInsert )
-            cSQLInsert := Substring(cSQLInsert,1,Len(cSQLInsert)-2)
-        Endif
+		While (cAliasT)->( !Eof() )
+			cSQLInsert += "( "
+			For nX := 1 To Len(aStructSF1)
+				nPos := aScan( aStructTmp, { |x| AllTrim( x[1] ) == AllTrim( aStructSF1[ nX,1 ] )})
+				If nPos > 0
+					If ValType(( cAliasT )->( FieldGet( nPos ) )) == "N"
+						cSQLInsert +=  "'"   + CValToChar( ( cAliasT )->( FieldGet( nPos ) ) ) + "',"
+					ElseIf ValType(( cAliasT )->( FieldGet( nPos ) )) == "D"
+						cSQLInsert +=  "'"   + DtoS( ( cAliasT )->( FieldGet( nPos ) ) ) + "',"
+					Else
+						cSQLInsert +=  "'"   + ( cAliasT )->( FieldGet( nPos ) ) + "',"
+					Endif
+				Endif
+			Next nX
 
-        cSQLInsert += " ) VALUES "
+			cSQLInsert := Substring(cSQLInsert,1,Len(cSQLInsert)-1) + " ), "
+			( cAliasT )->( DbSkip() )
+		Enddo
 
-        While (cAliasT)->( !Eof() )
-            cSQLInsert += "( "
-            For nX := 1 To Len(aStructSF1)
-                nPos := aScan( aStructTmp, { |x| AllTrim( x[1] ) == AllTrim( aStructSF1[ nX,1 ] )})
-                If nPos > 0
-                    If ValType(( cAliasT )->( FieldGet( nPos ) )) == "N"
-                        cSQLInsert +=  "'"   + CValToChar( ( cAliasT )->( FieldGet( nPos ) ) ) + "',"
-                    ElseIf ValType(( cAliasT )->( FieldGet( nPos ) )) == "D"
-                        cSQLInsert +=  "'"   + DtoS( ( cAliasT )->( FieldGet( nPos ) ) ) + "',"
-                    Else
-                        cSQLInsert +=  "'"   + ( cAliasT )->( FieldGet( nPos ) ) + "',"
-                    Endif
-                Endif
-            Next nX
-            
-            cSQLInsert := Substring(cSQLInsert,1,Len(cSQLInsert)-1) + " ), "             
-            ( cAliasT )->( DbSkip() )
+		cSQLInsert := Substring(cSQLInsert,1,Len(cSQLInsert)-2)
+		nRet := TCSQLExec( cSQLInsert )
 
-        Enddo
-        
-        cSQLInsert := Substring(cSQLInsert,1,Len(cSQLInsert)-2)
-        
-        nRet := TCSQLExec( cSQLInsert )
-                            
-        If nRet < 0
-            MsgStop( TCSqlError() ) 
-        EndIf
+		If nRet < 0
+			MsgStop( TCSqlError() )
+		EndIf
 
-    Else
-    
-        While (cAliasT)->( !Eof() )
+	Else
 
-            RecLock( cAlias, .T.)
-            nLen := Len( aStructSF1 )
-                For nX := 1 To nLen
-                    nPos := aScan(aStructTmp,{|x| AllTrim( x[1] ) == AllTrim(aStructSF1[nX][1])})
-                    If nPos > 0 
-                        (cAlias)->( FieldPut( nX, (cAliasT)->( FieldGet(nPos) ) ) )
-                    EndIf
-                Next nX
-            ( cAlias )->( MsUnlock() )
-    
-            (cAliasT)->( DBSkip() ) 
-        Enddo
-	
-    Endif
+		While (cAliasT)->( !Eof() )
+			RecLock( cAlias, .T.)
+			nLen := Len( aStructSF1 )
+			For nX := 1 To nLen
+				nPos := aScan(aStructTmp,{|x| AllTrim( x[1] ) == AllTrim(aStructSF1[nX][1])})
+				If nPos > 0
+					(cAlias)->( FieldPut( nX, (cAliasT)->( FieldGet(nPos) ) ) )
+				EndIf
+			Next nX
+			( cAlias )->( MsUnlock() )
 
-    aSize( aStructTmp, 0 )
+			(cAliasT)->( DBSkip() )
+		Enddo
+	Endif
 
+	aSize( aStructTmp, 0 )
 Return Nil

@@ -14,7 +14,6 @@
 /*/
 //-------------------------------------------------------------------
 Function DSGravaTxt()
-
     Local aFile         := {}
     Local aDados        := {}
     Local aDiretorio    := {}
@@ -55,7 +54,6 @@ Function DSGravaTxt()
     aSize( aFile, 0 )
     aSize( aDados, 0 )
     aSize( aDiretorio, 0 )
-
 Return Nil
 
 //------------------------------------------------------------------
@@ -72,7 +70,6 @@ Return Nil
 /*/
 //-------------------------------------------------------------------
 Static Function GravaArq( cDiretorio, aDados )
-
     Local nHandle   := FCreate( cDiretorio + "\Compilar.txt" )
     Local nX        := 0
  
@@ -84,7 +81,6 @@ Static Function GravaArq( cDiretorio, aDados )
         Next nX        
         FClose( nHandle )
     endif
-
 Return Nil
 
 //------------------------------------------------------------------
@@ -100,11 +96,9 @@ Return Nil
 /*/
 //-------------------------------------------------------------------
 Static Function RetFile( aFile , aDados )
-
     Local nY    := 0
 
     For nY := 1 To Len( aFile )
         aAdd( aDados, aFile[ nY, 1 ] )
     Next nY
-
 Return Nil

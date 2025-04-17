@@ -27,7 +27,6 @@ Function DSGeraCNPJ( nBase )
     cBase := cBase + CValToChar( nDv )
     nDv := CalcDv( cBase , 6 )
     cRet := cBase + CValToChar( nDv )
-
 Return cRet
 
 //-------------------------------------------------------------------
@@ -47,7 +46,6 @@ Return cRet
 //-------------------------------------------------------------------
 
 Static Function CalcDv( cBase , nMult )
-
     Local nI    as numeric
     Local nMod  as numeric
     Local nRet  as numeric
@@ -68,5 +66,4 @@ Static Function CalcDv( cBase , nMult )
     
     nMod := Mod( nRet, 11 )
     nRet := IIF( nMod < 2, 0, 11 - nMod )
-
 Return nRet

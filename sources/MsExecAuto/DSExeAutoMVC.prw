@@ -16,8 +16,7 @@ Return Nil
 INCLUI COMPROMISSO
 */
 
-Static Function  DCRM180I()
-
+Static Function DCRM180I()
 	Local aErro	:= {}
 	Local oModel  := FWLoadModel("CRMA180")
 	
@@ -59,11 +58,9 @@ Static Function  DCRM180I()
 	//Limpa da memoria objeto e Limpa Array
 	FreeObj(oModel)
 	aSize(aErro,0)
-
 Return Nil
 
-Static Function  DCRM180A()
-
+Static Function DCRM180A()
 	Local aErro	:= {}
 	Local oModel  := FWLoadModel("CRMA180")
 	
@@ -100,14 +97,12 @@ Static Function  DCRM180A()
 		oModel:DeActivate()
 		//Limpa da memoria objeto e Limpa Array
 		FreeObj(oModel)
-		aSize(aErro,0)
-	
+		aSize(aErro,0)	
 	Endif
 
 Return Nil
 
 Static Function  DCRM180E()
-
 	Local aErro	:= {}
 	Local oModel  := FWLoadModel("CRMA180")
 	
@@ -142,8 +137,6 @@ Static Function  DCRM180E()
 		oModel:DeActivate()
 		//Limpa da memoria objeto e Limpa Array
 		FreeObj(oModel)
-		aSize(aErro,0)
-	
+		aSize(aErro,0)	
 	Endif
-
 Return Nil

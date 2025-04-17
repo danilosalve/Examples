@@ -11,8 +11,7 @@
     @since		27/11/2019
 /*/
 //-------------------------------------------------------------------
-Function DSMsGet()
-    
+Function DSMsGet()    
     Local oSay1, oSay2, oSay3, oSay4, oSay5, oSay6, oSay7
     Local nOpca     as Numeric
     Local oDlg      as Object
@@ -89,12 +88,10 @@ Return Nil
     @since		27/11/2019
 /*/
 //-------------------------------------------------------------------
-Static Function lVerPD(lPdCGC)    
-
+Static Function lVerPD(lPdCGC)
     If lPdCGC
         lPdCGC := .F.
     Else
         lPdCGC := .T.
     Endif
-
 Return lPdCGC

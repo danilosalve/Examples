@@ -12,7 +12,6 @@
 /*/
 //-------------------------------------------------------------------
 Function DSConsCEP( cCep )
-
     Local cURL      := "http://viacep.com.br/ws"
     Local oRestCli  := Nil
     Local oRet      := Nil
@@ -31,5 +30,4 @@ Function DSConsCEP( cCep )
     Endif
 
     FreeObj( oRestCli )
-
 Return oRet

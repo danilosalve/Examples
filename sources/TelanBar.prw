@@ -1,11 +1,11 @@
 #include 'protheus.ch'
 
 user function TelanBar()
-	Local oDlgTst
-	Local oBar
-	Local oBtnCalc
-	Local oBtnPar
-	Local oBtnOk
+	Local oDlgTst as object
+	Local oBar as object
+	Local oBtnCalc as object
+	Local oBtnPar as object
+	Local oBtnOk as object
 
 	oDlgTst  := MsDialog():New(000,000,305,505, 'Exemplo -BUTTONBAR',,,,,,,,,.T.)
 	
@@ -31,5 +31,4 @@ user function TelanBar()
 
 	oDlgTst:lCentered := .T.
 	oDlgTst:Activate()
-
 Return Nil

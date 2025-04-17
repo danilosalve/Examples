@@ -14,7 +14,6 @@
 /*/
 //-------------------------------------------------------------------
 Function DSLock()
-
     Local cAlias    := "SA1"
     Local aLockList := {}
 
@@ -48,6 +47,5 @@ Function DSLock()
     Conout('Thread: ' + cValToChar(ThreadId()))
     Conout(Replicate('-',50))
 
-    aSize(aLockList, 0)
-    
+    aSize(aLockList, 0)    
 Return Nil

@@ -19,7 +19,6 @@ Return Nil
 
 
 Static Function CriaJson()
-
     Local oJson     := JsonObject():new()
     Local oJsonName := JsonObject():new()
     Local oJsonCar  := JsonObject():new()
@@ -36,11 +35,9 @@ Static Function CriaJson()
     Conout(oJson:ToJSON())
 
     FreeObj(oJson)
-
 Return Nil
 
 Static Function ConvJson()
-
     Local oJson := JsonObject():new()
     
     oJson:fromJson('{"name":"John", "age":31, "city":"New York"}')
@@ -48,5 +45,4 @@ Static Function ConvJson()
     Conout(oJson:ToJSON())
 
     FreeObj(oJson)
-
 Return Nil

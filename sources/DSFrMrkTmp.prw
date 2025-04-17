@@ -14,7 +14,6 @@
 /*/
 //-----------------------------------------------------------
 Function DSFrMrkTmp()
-
     Local aFields   := {}
     Local aColumns  := GetColumns("SF1",.F.,@aFields)
     Local aIndex	:= {"F1_DOC","F1_FORNECE"}
@@ -51,7 +50,6 @@ Function DSFrMrkTmp()
     aSize(aSize,0)
     FreeObj(oMBrowse)
     FreeObj(oDlg)
-
 Return Nil
 
 //------------------------------------------------------------------------------
@@ -70,7 +68,6 @@ Return Nil
 /*/
 //------------------------------------------------------------------------------
 Static Function GetColumns(cAlias, lMark, aFields)
-
     Local aAreaSX3  := SX3->(GetArea())
     Local aColumns  := {}    
     Local nLinha    := 0
@@ -112,7 +109,6 @@ Static Function GetColumns(cAlias, lMark, aFields)
 
     RestArea(aAreaSX3)
     aSize(aAreaSX3,0)
-
 Return aColumns
 
 //------------------------------------------------------------------------------
@@ -131,7 +127,6 @@ Return aColumns
 /*/
 //------------------------------------------------------------------------------
 Static Function GetQuery(cAlias, aFields, lMark)
-
     Local cQuery    := " SELECT "
     Local nI        := 0
 
@@ -160,7 +155,6 @@ Static Function GetQuery(cAlias, aFields, lMark)
     cQuery += " ORDER BY " + (cAlias)->(IndexKey())
 
     cQuery := ChangeQuery(cQuery)
-
 Return cQuery
 
 //------------------------------------------------------------------------------
@@ -178,12 +172,10 @@ Return cQuery
 /*/
 //------------------------------------------------------------------------------
 
-Static Function SetMarK(cAlias, cMarca)
-	
+Static Function SetMarK(cAlias, cMarca)	
 	If !(cAlias)->(Eof())
 		RecLock(cAlias, .F.)
 		(cAlias)->MARK := IIf((cAlias)->MARK = cMarca,"  ",cMarca)
 		MsUnlock(cAlias)
 	EndIf
-
 Return Nil

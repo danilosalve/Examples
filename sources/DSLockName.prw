@@ -19,7 +19,6 @@
 /*/
 //-----------------------------------------------------------------
 Function DSLockName()
-
     Local cNomeFunc      := "DSLockName"
     Local lLockByEmp    := .F.
     Local lLockByFil    := .F.
@@ -32,5 +31,4 @@ Function DSLockName()
     * Desativa Semaforo
     * UnLockByName("NOME_DA_SUA_ROTINA",.F.,.F.)
     */
-
 Return Nil

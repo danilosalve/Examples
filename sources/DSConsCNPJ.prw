@@ -12,8 +12,7 @@
     @see        https://receitaws.com.br/api
 /*/
 //-------------------------------------------------------------------
-Function DSConsCNPJ( cCnpj )
-    
+Function DSConsCNPJ( cCnpj )    
     Local cURL      := "https://www.receitaws.com.br/v1/cnpj/"    
     Local oRestCli  := Nil
     Local oRet      := Nil   
@@ -32,5 +31,4 @@ Function DSConsCNPJ( cCnpj )
     Endif
 
     FreeObj( oRestCli )
-
 Return oRet

@@ -10,7 +10,6 @@ Url: http://tdn.totvs.com/display/framework/FWRest
 /*/
 
 User Function DSRestTest()
-
     Local aHeadStr    := {}
     Local cUrl      := "http://localhost:8082"
     Local oRestCli  := Nil

@@ -2,10 +2,8 @@
 #include "DBTREE.CH"
 
 User function DSTREE()
-
-	Local oTree	:= Nil
-	Local oDlg	:= Nil
-	
+	Local oTree	as object
+	Local oDlg	as object	
 
 	DEFINE DIALOG oDlg TITLE "Exemplo de DBTree" FROM 180,180 TO 550,700 PIXEL	    
 	// Cria a Tree    
@@ -51,7 +49,6 @@ Static Function TreeNewIt(oTree)
 		oTree:AddItem("Sub-nivel 01","007", "FOLDER6",,,,2)	    
 		oTree:AddItem("Sub-nivel 02","008", "FOLDER6",,,,2)	  
 	endif
-
 Return
 
 

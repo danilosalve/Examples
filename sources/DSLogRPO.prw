@@ -14,7 +14,6 @@
 /*/
 //-----------------------------------------------------------------------------------
 Function DSLogRPO()
-
     Local aData     := GetRpoLog()
     Local nPatch    := 0
     Local nProgram  := 0
@@ -55,5 +54,4 @@ Function DSLogRPO()
     Next nPatch
 
     aSize(aData, 0)
-
 Return Nil
