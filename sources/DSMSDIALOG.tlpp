@@ -1,0 +1,24 @@
+#include "protheus.ch"
+#include "tlpp-core.th"
+
+#DEFINE URL "https://www.rapidtables.org/pt/web/tools/window-size.html"
+/*/{Protheus.doc} DSMSDIALOG
+Exemplo de uso da MSDIALOG
+
+@type function
+@version 1.0
+@author Danilo Salve
+@since 23/04/2025
+/*/
+main function DSMSDIALOG()
+    Local oDialog as object
+    // Exemplo de janela sem borda
+    
+    DEFINE MSDIALOG oDialog TITLE oEmToAnsi("Minha Dialog") FROM 000,000 TO 708, 621 STYLE nOR(WS_VISIBLE,WS_POPUP) PIXEL
+    FwCallApp("Paramêtros do Smart View", oDialog, , , URL + "&")
+    // Não permite fechar a janela ao teclar ESC.
+    oDialog:lEscClose:= .T.
+
+    ACTIVATE MSDIALOG oDialog CENTERED
+
+return
