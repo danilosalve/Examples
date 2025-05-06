@@ -28,7 +28,7 @@ method new() class PedidosTReportsBusinessObject
 	//Define o nome do Objeto de Negócio
 	self:setDisplayName("Pedidos de vendas - Testes")
 	// Define um grupo de perguntas
-	self:lExistPergunte :=  self:setPergunte("DSPARAMS")
+	self:lExistPergunte := self:setPergunte("DSPARAMS")
 	if !self:lExistPergunte
 		if !self:setErrorStatus(400,"Sem Pergunte","Verifique o grupo de perguntas informado!")
 			FwLogMsg("WARN",, "SmartView",,, , "Codigo de erro invalido, aceito somente codigos de erro 4xx", , ,)
@@ -77,12 +77,37 @@ method getData(nPage as numeric, oFilter as object) as object class PedidosTRepo
 	else
 		jParams := oFilter:getParameters() //metodo para retorno do json dos parâmetros
 		// Define a whery utilizando os parametros do relatorio.
-		cWhere := " SC5.C5_FILIAL = '" + FwXFilial('SC5') + "'"
+		If jParams:hasProperty("MV_FIL") .and. !empty(jParams["MV_FIL"][1])
+			cWhere := " SC5.C5_FILIAL IN " + FormatIn(jParams["MV_FIL"][1], ";") 
+		Else
+			cWhere := " SC5.C5_FILIAL = '" + FwXFilial('SC5') + "'"
+		EndIf
+
 		cWhere += " AND SC5.C5_CLIENTE BETWEEN '" + jParams['MV_PAR01'][1] + "' AND '" + jParams['MV_PAR02'][1] + "'"
+
+		if jParams:hasProperty("CONDPAG") .and. !empty(jParams["CONDPAG"][1])
+			cWhere += " AND SC5.C5_CONDPAG = '" + jParams["CONDPAG"][1] + "'"
+		endIf
+
+		if jParams:hasProperty("ISOPEN") .and. jParams["ISOPEN"][1]
+			cWhere += " AND SC5.C5_NOTA = '" + Space(FwGetSx3Cache("C5_NOTA", "X3_TAMANHO")) + "'"
+		endIf
+
+		if jParams:hasProperty("CURRENCY") .and. jParams["CURRENCY"][1]
+			cWhere += " AND SC5.C5_MOEDA = " + cValtoChar(jParams["CURRENCY"][1]) 
+		endIf
 
 		// If !Empty(jParams['MV_PAR04'][1])
 		// 	cWhere += " AND SC5.C5_EMISSAO = '" + jParams['MV_PAR04'][1] + "'"
 		// Endif
+
+		// Somente do vendedor informado
+		if jParams:hasProperty("MV_PAR06") .and. jParams["MV_PAR06"][1] == 1
+			if jParams:hasProperty("MV_PAR05") .and. jParams["MV_PAR05"][1]
+				cWhere += " AND SC5.C5_VEND1 = " + cValtoChar(jParams["MV_PAR05"][1]) 
+			endIf
+		endIf
+
 
 		If oFilter:hasFilter()
 			cWhere += " AND " + oFilter:getSQLExpression()
@@ -117,6 +142,15 @@ Método responsavel por obter os metadados do relatorio.
 /*/
 method getSchema() as object class PedidosTReportsBusinessObject
 	self:aliasToSchema("SC5" , {"C5_NUM", "C5_CLIENTE", "C5_LOJACLI", "C5_EMISSAO", "C5_VEND1"})
-	// Adicionar uma parametro Lógico
-	self:addParameter("ISOPEN", "Apenas pedidos em aberto?",    "boolean",  .F.)
+	// Adiciona um parâmetro para multipla seleção
+	self:addParameter("MV_FIL"	, "Filial"						, "string"	, .T.)
+	// Adiciona uma parâmetro de seleção simples
+	self:addParameter("CONDPAG"	, "Cond. Pagamento"				, "string"	, .F.)
+	// Adiciona um parâmetro Lógico
+	self:addParameter("ISOPEN"	, "Apenas pedidos em aberto?"	, "boolean"	, .F.)
+	// Adiciona um parâmetro numérico
+	self:addParameter("CURRENCY", "Moeda?"						, "number"	, .F.)
+	// Adiciona uma consulta padrão do tipo Range no parâmetro de filial
+	self:setCustomURL("MV_FIL"	, "api/framework/v1/genericLookupService/smartview/SM0", 2)
+	self:setCustomURL("CONDPAG"	, "api/framework/v1/genericLookupService/smartview/SE4", 2)
 return self:oSchema

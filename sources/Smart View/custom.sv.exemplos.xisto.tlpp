@@ -103,6 +103,8 @@ method getSchema() as object class XistoTReportsBusinessObject
     self:aliasToSchema("SA1" , {"A1_FILIAL", "A1_COD", "A1_LOJA", "A1_NOME", "A1_NREDUZ", "A1_CGC", "A1_END", "A1_BAIRRO", "A1_EST", "A1_MUN", "A1_CEP", "A1_RISCO"})
     // Adiciona um parâmetro manualmente    
     self:addParameter("SELLER", "Vendedor", "string", .F.) //"Vendedor"
+    self:addParameter("ISACTIVE", "Somente ativos?",    "boolean",  .F.) // Utilizar Horas Valorizadas?
+
     // Adiciona um LookUp utilizando o
     self:setCustomURL("SELLER", "/api/framework/v1/genericQuery?tables=SA3&fields=A3_COD,A3_NOME&Format=smartview&KeyProperty=a3_cod", 1)
 return self:oSchema

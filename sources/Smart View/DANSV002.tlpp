@@ -1,0 +1,41 @@
+#include 'totvs.ch'
+#include 'fw-tlpp-core.th'
+
+/*/{Protheus.doc} DANSV002
+Chamada do relatorio no menu - Relatorio sem parämetro
+@type function
+@version 1.0
+@author Danilo Salve
+@since 06/05/2025
+/*/
+function DANSV002()
+	local lSuccess As logical
+    local oSmartView as object
+
+    If totvs.framework.smartview.util.isConfig()
+        //1º parâmetro = Relatório cadastrado na tabela de De/Para (Campo TR__IDREL)
+        //2º parâmetro = Tipo do relatório ("reports" = relatório comum, "data-grid" = visão de dados, "pivot-table" = tabela dinâmica)
+        //3º parâmetro = Tipo do impressão (Arquivo=1, Email=2)
+        //4º parâmetro = Informações de impressão
+        //5º parâmetro = Parâmetros do relatório
+        //6º parâmetro = Indica se executa em job
+        //7º parâmetro = Indica se exibe os parâmetros para preenchimento
+        //8º parâmetro = Indica se exibe o wizard de configuração do Smart View
+        //9º parâmetro = Erro da execução
+        // lSuccess := totvs.framework.treports.callTReports("custom.sv.exemplos.noparams",,,,,,,, @cError) // Exemplo de Execução em JOB.
+        oSmartView := totvs.framework.smartview.callSmartView():new("custom.sv.exemplos.noparams")
+        oSmartView:setRunInJob(.f.)
+        oSmartView:setShowWizard(.t.)
+        lSuccess := oSmartView:executeSmartView()
+
+        if !lSuccess
+            Conout(oSmartView:GetError())
+        endif
+
+        FwFreeObj(@oSmartView)
+    else
+        Conout('Smart View não configurado.')
+    endIf
+
+
+return 

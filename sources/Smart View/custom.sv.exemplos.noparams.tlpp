@@ -1,0 +1,84 @@
+
+#include "msobject.ch"
+#include "totvs.framework.treports.integratedprovider.th"
+
+namespace custom.sv.exemplos.noparams.integratedprovider
+
+/*/{Protheus.doc} NoPAramsTReportsBusinessObject::new
+Exemplo de relatorio sem parametro.
+@type class
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Nova instancia do objeto.
+/*/
+@totvsFrameworkTReportsIntegratedProvider(active=.T., team="SIGAFAT", tables="SA1", name="Framework", country="ALL", initialRelease="12.1.2310")
+class NoPAramsTReportsBusinessObject from totvs.framework.treports.integratedprovider.IntegratedProvider
+	public method new() as object
+	public method getData() as object
+	public method getSchema() as object
+endclass
+
+/*/{Protheus.doc} NoPAramsTReportsBusinessObject::new
+Método construtor da classe.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Nova instancia do objeto.
+/*/
+method new() class NoPAramsTReportsBusinessObject
+	_Super:new()
+    //Define o nome do Objeto de Negócio
+	self:setDisplayName("Relatorio sem parâmetro")
+    //Define a descrição do Objeto de Negócio
+    self:setDescription("Relatorio de testes sem Parâmetro")
+    //Define a Área
+    self:appendArea("Framework")
+return self
+
+/*/{Protheus.doc} NoPAramsTReportsBusinessObject::getData(nPage as numeric, oFilter as object) as object
+Método responsavel por obter os dados do relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Dados do relatorio
+/*/
+method getData(nPage as numeric, oFilter as object) as object class NoPAramsTReportsBusinessObject
+	local cQuery as character
+    local cWhere as character
+    
+    // Define a whery utilizando os parametros do relatorio.
+    cWhere := " A1_FILIAL = '" + FwXFilial('SA1') + "'"
+
+    If oFilter:hasFilter()
+        cWhere += " AND " + oFilter:getSQLExpression()
+    Endif
+
+    cWhere += " AND D_E_L_E_T_ = ' '"
+
+    //Define a query do Objeto de Negócio
+    cQuery := "SELECT #QueryFields# FROM " + RetSQLName("SA1") +  " WHERE #QueryWhere#"
+
+    //Define a quantidade máxima por página (Default 100)
+    self:setPageSize(500)
+    //Define a query do Objeto de Negócio
+    self:setQuery(cQuery)
+    //Define o campo de ordenação da query
+    self:setOrder("A1_COD")
+    //Define o where da query
+    self:setWhere(cWhere)
+return self:oData
+
+/*/{Protheus.doc} NoPAramsTReportsBusinessObject::getSchema() as object
+Método responsavel por obter os metadados do relatorio.
+@type method
+@version 1.0
+@author Danilo Salve
+@since 14/12/2023
+@return object, Schema de campos
+/*/
+method getSchema() as object class NoPAramsTReportsBusinessObject
+    self:aliasToSchema("SA1" , {"A1_FILIAL", "A1_COD", "A1_LOJA", "A1_NOME", "A1_NREDUZ", "A1_CGC", "A1_END", "A1_BAIRRO", "A1_EST", "A1_MUN", "A1_CEP", "A1_RISCO"})
+return self:oSchema
