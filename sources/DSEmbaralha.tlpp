@@ -1,0 +1,18 @@
+#include "tlpp-core.th"
+
+/*/{Protheus.doc} DSEMBARALHA
+    Exemplo de uso da função EMBARALHA
+    @type  Function
+    @author user
+    @since 15/05/2025
+    @version 1.0
+    @see https://tdn.totvs.com/display/tec/Embaralha
+/*/
+function DSEMBARALHA()
+    Local cTextoEmbaralhado as character
+
+    cTextoEmbaralhado := EMBARALHA("Danilo", 0)
+
+    CONOUT("Texto embaralhado - " + cTextoEmbaralhado)
+    CONOUT("Texto desembaralhado - " + EMBARALHA(cTextoEmbaralhado, 1))    
+return 

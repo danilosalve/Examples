@@ -1,0 +1,30 @@
+#include "tlpp-core.th"
+
+/*/{Protheus.doc} DSMsgRun
+    Exemplo de FwMsgRun
+    @type  Function
+    @author Danilo Salve
+    @since 14/05/2025
+    @version 1.0
+    @see https://tdn.totvs.com/x/TwoRE
+    /*/
+function DSMsgRun()
+    FWMsgRun(/* oComponent*/, {|oSay| ExecTest(oSay) }, "Processando", "Processando a rotina...")
+return 
+
+/*/{Protheus.doc} ExecTest
+Função de exemplo para execução do FWMsgRun
+@type function
+@version 1.0
+@author Danilo Salve
+@since 14/05/2025
+@param oSay, object, Objeto TSay que será atualizado
+/*/
+static function ExecTest(oSay)
+    local nCount as integer
+
+    For nCount := 1 To 10
+        Sleep(1000)
+        nCount++
+    Next
+return 
