@@ -1,0 +1,72 @@
+#include 'fw-tlpp-core.th'
+
+namespace custom.sample.global
+
+#define MY_UUID "ds_uuid"
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} dsCreateSession
+    Exemplo de manipulação de variáveis globais com HashMap.
+    @type function
+    @author danilo.salve
+    @since 09/06/2025
+    @version 1.0
+    @return logical, Indica se conseguiu criar a sessão cUID e/ou se ela já estava criada
+    @see https://tdn.totvs.com/display/tec/VarSetXD
+/*/
+//-------------------------------------------------------------------
+function dsCreateSession() as logical
+    local lCreate as logical
+    // Cria uma nova sessão nomeada de Variáveis Globais agrupadas em duas tabelas de HashMap
+    lCreate := VarSetUID(MY_UUID, .t. )
+
+    if !lCreate
+        conOut("Erro na criação da sessão: " + MY_UUID)
+    endIf
+return lCreate
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} dsSetVar
+    Exemplo de manipulação de uma chave em uma tabela X de uma Sessão
+    @type function
+    @version 1.0
+    @author danilo.salve
+    @since 09/06/2025
+    @param cChave, character, Identificador da chave
+    @param cValor, character, Valor a ser armazenado
+    @return logical, Indica se conseguiu armazenar o valor referente a sessão
+/*/
+//-------------------------------------------------------------------
+function dsSetVar(cChave as character, cValor as character) as logical
+    local lSet as logical
+    // Insere ou Atualiza o valor de uma "chave" na "Tabela X" de uma determinada sessão, sem fazer bloqueio da "chave"
+    lSet := VarSetXD(MY_UUID, cChave, cValor)
+
+    if(!lSet)
+        conOut("Erro na atualização da chave")
+    endIf
+return lSet
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} dsGetVar
+    Exemplo de consulta de valor de uma chave em uma tabela X de uma Sessão
+    @type function
+    @version 1.0
+    @author Danilo Salve
+    @since 09/06/2025
+    @param cChave, character, Identificador da chave
+    @param cValor, character, Valor a ser armazenado (Referência)
+    @return logical, return_description
+/*/
+//-------------------------------------------------------------------
+function dsGetVar(cChave as character, cValor as character) as logical
+    Local lGet as logical
+    // Recupera o valor de uma "chave" na "Tabela X" de uma determinada sessão, sem fazer bloqueio da "chave"
+    lGet := VarGetXD(MY_UUID, cChave, @cValor)
+
+    if(lGet)
+        conOut("Achou a chave: " + MY_UUID + " valor: " + AllTrim(cValor))
+    else
+        conOut("Erro na recuperação da chave")
+    endIf
+return lGet
