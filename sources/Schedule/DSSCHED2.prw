@@ -1,19 +1,22 @@
 #INCLUDE "PROTHEUS.CH"
 
-#DEFINE PERGUNTE "DSSCHED"
-
 //-----------------------------------------------------------
 /*/{Protheus.doc} DsSched
-	Fonte Fake para simular uma tarefa / agendamento no schedule
+	Fonte Fake para simular uma tarefa / agendamento no schedule - Sem SchedDef
 	@type function
 	@version 1.0
 	@author Danilo Salve
 	@since 15/12/2023
+    @param aParams, array, Array contendo (Empresa, Filial, Id do Usuário, Id do Agendamento)
 /*/
 //-----------------------------------------------------------
-function DsSched()
-	ConsoleMsg()
+main function DsSched2(aParams as array)
+    default aParams := {"T1", "D MG 01", "000002", ""}
+
+    RpcSetEnv( aParams[1], aParams[2], aParams[3], /*cEnvPass*/, /*cEnvMod*/, "DSSCHED2"/*cFunName - Se não informado usa RPC*/)
+	ConsoleMsg(aParams[4])
 	updateA1LC()
+    RpcClearEnv()
 return
 
 //-----------------------------------------------------------
@@ -36,10 +39,10 @@ static function updateA1LC()
 	aArea := FwGetArea()
 	cFilSA1 := FwXFilial("SA1")
 
-	cCodCliDe := iif(type("MV_PAR03") == "C", MV_PAR03, '')
-	cLojaDe := iif(type("MV_PAR04") == "C", MV_PAR04, '')
-	cCodCliAte := iif(type("MV_PAR05") == "C", MV_PAR05, '')
-	cLojaAte := iif(type("MV_PAR06") == "C", MV_PAR06, '')
+	cCodCliDe := "000002"
+	cLojaDe := "01"
+	cCodCliAte := "000004"
+	cLojaAte := "zz"
 
 	DbSelectArea("SA1")
 	SA1->(DbSetOrder(1)) // A1_FILIAL, A1_COD, A1_LOJA
@@ -66,51 +69,18 @@ return
 	@version 1.0
 	@author Danilo Salve
 	@since 16/06/2025
+    @param cAgendId, character, Identificador do Agendamento
 /*/
 //-----------------------------------------------------------
-static function ConsoleMsg()
-	local cLog as character
-    local lLog as logical
-
-    lLog := iif(type("MV_PAR01") == "N", MV_PAR01 == 1, .f.)
-    cLog := iif(type("MV_PAR02") == "C", MV_PAR02, '')
-
+static function ConsoleMsg(cAgendId as character)
     conOut(CRLF + " #################################### ")
 	conOut(" ############ DSSCHED ############### ")
 	conOut(" ############ " + Time() + " ############## ")
 	conOut(" #### EMPRESA : " + cEmpAnt + " ################## ")
 	conOut(" #### FILIAL : " + cFilAnt + " ############# ")
 	conOut(" #### USUARIO : " + __cUserId + " ############ ")
+	conOut(" #### AGENDAMENTO : " + cAgendId + " ####### ")
 	conOut(" #################################### ")
 	conOut(" #### DATA : " + DTOC(Date()) + " ############### ")
-
-    If lLog .and. !Empty(cLog)
-	    conOut(" #################################### ")
-	    conOut(" ########## MESSAGEM DE LOG ######### ")
-	    conOut(" ## " + cLog + " ## ")
-	    conOut(" ########## FIM MSG DE LOG ########## ")
-	    conOut(" #################################### ")
-    Endif
-
 	conOut(" #################################### " + CRLF)
 return nil
-
-//-----------------------------------------------------------
-/*/{Protheus.doc} Scheddef
-	Função estatica com a configurações do Schedule
-	@type function
-	@version 1.0
-	@author Danilo Salve
-	@since 15/12/2023
-	@return array, Parâmetros do schedule
-/*/
-//-----------------------------------------------------------
-static function Scheddef() as array
-	local aParam as array
-	
-	aParam := { "P",;			//Tipo R para relatorio P para processo
-        PERGUNTE,;		//Pergunte do relatorio, caso nao use passar ParamDef
-        ,;				//Alias
-        ,;				//Array de ordens
-	}
-return aParam
