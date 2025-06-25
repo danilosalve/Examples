@@ -1,0 +1,56 @@
+#include 'fw-tlpp-core.th'
+#include 'protheus.ch'
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} ESPA003
+    Rotina utilizada para execução de funções diretamente do Menu
+    @type function
+    @version 1.0
+    @author Danilo Salve
+    @since 23/06/2025
+/*/
+//-------------------------------------------------------------------
+function ESPA003()
+    local oDlg as object
+    local oSay as object
+
+    private oGet as object
+    private cFunction := Space(50) as character
+    
+    DEFINE MSDIALOG oDlg TITLE OemToAnsi("Executar Função") FROM 000, 000 TO 120, 305 PIXEL 
+
+        @ 010, 010 SAY oSay PROMPT "Função" SIZE 55, 07 OF oDlg PIXEL
+        @ 010, 050 MSGET oGet VAR cFunction SIZE 100, 08 OF oDlg PIXEL VALID !Vazio()
+        oGet:cPlaceHold := "Informe uma função - Ex.: Alert('Teste')"
+
+        DEFINE SBUTTON FROM 025, 122 TYPE 1 ACTION (execute(cFunction)) ENABLE OF oDlg
+
+    ACTIVATE MSDIALOG oDlg CENTERED
+
+    FwFreeObj(@oSay)
+    FwFreeObj(@oGet)
+    FwFreeObj(@oDlg)
+return 
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} execute
+    Executa a função informada
+    @type function
+    @version 1.0
+    @author Danilo Salve
+    @since 23/06/2025
+    @param cFunction, character, Função
+/*/
+//-------------------------------------------------------------------
+static function execute(cFunction as character)
+    local cError as character
+
+    try
+        cFunction := IIF(at("()", cFunction) == 0, rtrim(cFunction) + "()", cFunction)
+        Eval(&('{ || ' + cFunction + ' } '))
+    catch oError
+        cError := "Ops ocorreu um erro durante a execução " + oError:description
+        conOut( oError:description )
+        alert( cError )
+    endtry
+return 

@@ -1,0 +1,167 @@
+#include 'fw-tlpp-core.th'
+#include 'protheus.ch'
+
+static __nOkCancel as numeric
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} DSFBrwArray
+Exemplo de uso da classe FwBrowse utilizando um Array
+@type function
+@version 1.0
+@author Danilo Salve
+@since 23/06/2025
+@param aList, array, lista de registros
+@param aFilteredList, array, lista de registros filtrados - Utilizado apenas para buscar a posição de registros filtrados.
+/*/
+//-------------------------------------------------------------------
+function DSFBrwArray(aList as array, aFilteredList as array)
+	local oBrowse as object
+    local oModal as object
+    local aFields := {}  as array
+    local aSeek := {} as array
+
+    default aList := getList()
+    default aFilteredList := {}
+
+    aAdd( aFields, { "Heroi", "Heroi", "C", 20, 0, ""} )
+    aAdd( aFields, { "Nome", "Nome", "C", 100, 0, ""} )
+    		
+    Aadd( aSeek, { "Heroi", { {"", "C", 20, 0, "Heroi" } } } )  
+    Aadd( aSeek, { "Nome", { {"", "C", 100, 0, "Nome" } } } ) 
+
+    oModal := FWDialogModal():New()
+	oModal:setSize(300, 500)
+	oModal:SetTitle( "Browse com Array" )
+	oModal:SetEscClose(.T.)
+	oModal:CreateDialog()
+
+	oBrowse := FWBrowse():new( oModal:GetPanelMain() )
+	oBrowse:setDataArray(.T.)
+	oBrowse:setArray(aList)
+	oBrowse:DisableConfig()
+	oBrowse:DisableReport()
+	oBrowse:setFieldFilter(aFields)
+	oBrowse:setSeek(/*bAction*/, aSeek)
+
+    oBrowse:setDoubleClick( {|| onAction(oBrowse, aFilteredList) } )
+    oModal:AddOkButton( {|| __nOkCancel := oBrowse:At(), onAction(oBrowse, aFilteredList), oModal:Deactivate() },"Confirmar" )
+    oModal:AddCloseButton( {|| __nOkCancel := -1, oModal:Deactivate() }, "Fechar")
+
+    oBrowse:setOwner(oModal:GetPanelMain())
+    oBrowse:setDescription( "Personagens da DC" )
+    
+    setColumns( aList, oBrowse )
+
+    oBrowse:activate()
+    oModal:activate()
+
+    fwFreeObj(@oBrowse)
+    fwFreeObj(@oModal)
+
+    fwFreeArray(@aSeek)
+    fwFreeArray(@aFields)
+return 
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} onDoubleClick
+    Ação do duplo clique na linha ou no botão da Dialog
+    @type function
+    @version 1.0
+    @author Danilo Salve
+    @since 23/06/2025
+    @param oBrowse, object, FwBrowse
+    @param aFilteredList, array, lista de registros filtrados - Utilizado apenas para buscar a posição de registros filtrados.
+/*/
+//-------------------------------------------------------------------
+function onAction(oBrowse as object, aFilteredList as array) 
+    Alert("Cliquei na Linha: " + cValtoChar(oBrowse:At()))
+    Varinfo("BrowseData", oBrowse:Data():GetArray())
+
+    if oBrowse:Filtrate() 
+        aFilteredList := aClone(oBrowse:Data():GetArray())
+    endIf
+return
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} getList
+    Obter uma lista de personagens da liga da justiça
+    @type function
+    @version 1.0
+    @author Danilo Salve
+    @since 23/06/2025
+    @return array, Lista com 10 personagens da liga da justiça
+/*/
+//-------------------------------------------------------------------
+static function getList() as array
+    local aList := {} as array
+
+    aAdd(aList, { FWUUIDV4(.T.), "Superman","Clark Kent" })
+    aAdd(aList, { FWUUIDV4(.T.), "Batman","Bruce Wayne" })
+    aAdd(aList, { FWUUIDV4(.T.), "Mulher-Maravilha","Princesa Diana de Themyscira" })
+    aAdd(aList, { FWUUIDV4(.T.), "Flash","Barry Allen" })
+    aAdd(aList, { FWUUIDV4(.T.), "Lanterna Verde","Hal Jordan" })
+    aAdd(aList, { FWUUIDV4(.T.), "Aquaman","Arthur Curry" })
+    aAdd(aList, { FWUUIDV4(.T.), "Caçador de Marte","J'onn J'onzz" })
+    aAdd(aList, { FWUUIDV4(.T.), "Cyborg","Victor Stone" })
+    aAdd(aList, { FWUUIDV4(.T.), "Arqueiro Verde","Oliver Queen" })
+    aAdd(aList, { FWUUIDV4(.T.), "Zatanna","Zatanna Zatara" })
+    aAdd(aList, { FWUUIDV4(.T.), "Flash Gordon","Alex Raymond" })
+    aAdd(aList, { FWUUIDV4(.T.), "Mulher-Gavião","Kendra Saunders" })
+    aAdd(aList, { FWUUIDV4(.T.), "Mulher-Gato","Selina Kyle" })
+    aAdd(aList, { FWUUIDV4(.T.), "Mulher-Elástica","Rita Farr" })
+
+return aList
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} setColumns
+    Define as colunas do Browse
+    @type function
+    @version 1.0
+    @author Danilo Salve
+    @since 23/06/2025
+    @param aList, array, Lista de itens da browse
+    @param oBrowse, object, FwBrowse
+/*/
+//-------------------------------------------------------------------
+static function setColumns( aList as array, oBrowse as object )
+    oColumn := FWBrwColumn():New()
+    oColumn:SetData({||aList[oBrowse:At(), 2]})
+    oColumn:SetTitle("Heroi")
+    oColumn:SetSize(020)
+    oBrowse:SetColumns({oColumn})
+
+	oColumn := FWBrwColumn():New()
+    oColumn:SetData({||aList[oBrowse:At(), 3]})
+    oColumn:SetTitle("Nome")
+    oColumn:SetSize(060)
+    oBrowse:SetColumns({oColumn})
+return
+
+//-------------------------------------------------------------------
+/*/{Protheus.doc} DSFBrwArray2
+    POC - Mantendo alterando posição do array original caso seja utilizado o filtro do campo de pesquisa
+    @type function
+    @version 1.0
+    @author Danilo Salve
+    @since 25/06/2025
+/*/
+//-------------------------------------------------------------------
+function DSFBrwArray2()
+    local aBrowseList as array
+    local aFilteredList := {} as array
+
+    aBrowseList := getList()
+
+    DSFBrwArray(aBrowseList, aFilteredList)
+    // Se o Browse foi filtrado, a posição retornada no nAT não condiz com a posição do Array original
+    if __nOkCancel > 0 .and. len(aFilteredList) > 0
+        __nOkCancel := aScan(aBrowseList,{|x| x[1]==aFilteredList[__nOkCancel][1]})
+        Alert("Heroi selecionado: " + aBrowseList[__nOkCancel][2])
+    elseif __nOkCancel > 0
+        Alert("Heroi selecionado: " + aBrowseList[__nOkCancel][2])
+    else
+        Alert("Operação cancelada")
+    endIf
+
+    FwFreeArray(@aBrowseList)
+return nil
