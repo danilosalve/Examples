@@ -25,7 +25,7 @@ function DSFBrwArray(aList as array, aFilteredList as array)
 
     aAdd( aFields, { "Heroi", "Heroi", "C", 20, 0, ""} )
     aAdd( aFields, { "Nome", "Nome", "C", 100, 0, ""} )
-    		
+
     Aadd( aSeek, { "Heroi", { {"", "C", 20, 0, "Heroi" } } } )  
     Aadd( aSeek, { "Nome", { {"", "C", 100, 0, "Nome" } } } ) 
 
@@ -51,6 +51,8 @@ function DSFBrwArray(aList as array, aFilteredList as array)
     oBrowse:setDescription( "Personagens da DC" )
     
     setColumns( aList, oBrowse )
+
+    oBrowse:delColumn(1)
 
     oBrowse:activate()
     oModal:activate()
@@ -125,13 +127,22 @@ return aList
 //-------------------------------------------------------------------
 static function setColumns( aList as array, oBrowse as object )
     oColumn := FWBrwColumn():New()
+    oColumn:SetData({||aList[oBrowse:At(), 1]})
+    oColumn:SetType("C")
+    oColumn:SetTitle("Id")
+    oColumn:SetSize(050)
+    oBrowse:SetColumns({oColumn})
+
+    oColumn := FWBrwColumn():New()
     oColumn:SetData({||aList[oBrowse:At(), 2]})
+    oColumn:SetType("C")
     oColumn:SetTitle("Heroi")
     oColumn:SetSize(020)
     oBrowse:SetColumns({oColumn})
 
 	oColumn := FWBrwColumn():New()
     oColumn:SetData({||aList[oBrowse:At(), 3]})
+    oColumn:SetType("C")
     oColumn:SetTitle("Nome")
     oColumn:SetSize(060)
     oBrowse:SetColumns({oColumn})
@@ -163,5 +174,6 @@ function DSFBrwArray2()
         Alert("Operação cancelada")
     endIf
 
+    FwFreeArray(@aFilteredList)
     FwFreeArray(@aBrowseList)
 return nil
